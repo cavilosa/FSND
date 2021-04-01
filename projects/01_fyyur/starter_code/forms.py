@@ -113,9 +113,11 @@ class VenueForm(Form):
             ('Other', 'Other'),
         ]
     )
+
     facebook_link = StringField(
         'facebook_link', validators=[URL()]
     )
+
     website_link = StringField(
         'website_link'
     )
@@ -125,7 +127,6 @@ class VenueForm(Form):
     seeking_description = StringField(
         'seeking_description'
     )
-
 
 
 class ArtistForm(Form):
@@ -236,4 +237,3 @@ class ArtistForm(Form):
     seeking_description = StringField(
             'seeking_description'
      )
-
