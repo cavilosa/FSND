@@ -172,6 +172,40 @@ def show_venue(venue_id):
     venues = Venue.query.filter(Venue.id == venue_id).all()
     for venue in venues:
         print("venue", venue.id, len(venues))
+        shows = venue.shows
+        print("venue.shows", len(shows))
+        for show in shows:
+            current_date = datetime.now()
+            print("current time, start_time", current_date, show.start_time)
+            past_shows = []
+            upcoming_shows = []
+            print(type(show.start_time.strftime("%d/%m/%Y, %H:%M")))
+            print("types of dates", type(str(current_date)), type(str(show.start_time)))
+
+            # FISISH!!!!!!
+
+            # if show.start_time.strftime("%m/%d/%Y, %H:%M") > current_date.strftime("%m/%d/%Y, %H:%M"):
+            #     artist = Artist.query.get(show.artist_id)
+            #     past_shows.append(
+            #         {
+            #             "artist_id": show.artist_id,
+            #             "artist_name": artist.name,
+            #             "artist_image_link": artist.image_link,
+            #             "start_time": show.start_time
+            #         }
+            #     )
+            # else:
+            #     artist = Artist.query.get(show.artist_id)
+            #     upcoming_shows.append(
+            #         {
+            #             "artist_id": show.artist_id,
+            #             "artist_name": artist.name,
+            #             "artist_image_link": artist.image_link,
+            #             "start_time": show.start_time
+            #         }
+            #     )
+
+
     data =  {
         "id": venue.id,
         "name": venue.name,
@@ -185,19 +219,10 @@ def show_venue(venue_id):
         "seeking_talent": venue.seeking_talent,
         "seeking_description": venue.seeking_description,
         "image_link": venue.image_link,
-
-        #
-        # NOt finished!!!!!!!!!!!!!!!!!!!!!
-        #
-        "past_shows": [{
-          "artist_id": 4,
-          "artist_name": "Guns N Petals",
-          "artist_image_link": "https://images.unsplash.com/photo-1549213783-8284d0336c4f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80",
-          "start_time": "2019-05-21T21:30:00.000Z"
-        }],
-        "upcoming_shows": [],
-        "past_shows_count": 1,
-        "upcoming_shows_count": 0
+        "past_shows": past_shows,
+        "upcoming_shows": upcoming_shows,
+        "past_shows_count": len(past_shows),
+        "upcoming_shows_count": len(upcoming_shows)
     }
 
     # data1={
@@ -583,15 +608,33 @@ def create_shows():
 
 @app.route('/shows/create', methods=['POST'])
 def create_show_submission():
-  # called to create new shows in the db, upon submitting new show listing form
-  # TODO: insert form data as a new Show record in the db, instead
+    # called to create new shows in the db, upon submitting new show listing form
+    # TODO: insert form data as a new Show record in the db, instead
+    form = ShowForm(request.form, meta={'csrf': False})
+    if form.validate():
+        try:
+            show = Show()
+            form.populate_obj(show)
+            db.session.add(show)
+            db.session.commit()
+            # on successful db insert, flash success
+            flash('Show was successfully listed!')
+        except ValueError as e:
+            print(e)
+            flash('An error occurred. Show ' + data.name + ' could not be listed.')
+            db.session.rollback()
+        finally:
+            db.session.close()
+    else:
+        message=[]
+        for field, err in form.errors.items():
+            message.append(field + " " + "|".join(err))
+        flash("Errors" +  str(message))
 
-  # on successful db insert, flash success
-  flash('Show was successfully listed!')
-  # TODO: on unsuccessful db insert, flash an error instead.
-  # e.g., flash('An error occurred. Show could not be listed.')
-  # see: http://flask.pocoo.org/docs/1.0/patterns/flashing/
-  return render_template('pages/home.html')
+            # TODO: on unsuccessful db insert, flash an error instead.
+            # e.g., flash('An error occurred. Show could not be listed.')
+            # see: http://flask.pocoo.org/docs/1.0/patterns/flashing/
+    return render_template('pages/home.html')
 
 @app.errorhandler(404)
 def not_found_error(error):
