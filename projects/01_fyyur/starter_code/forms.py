@@ -192,6 +192,11 @@ class ArtistForm(Form):
             ('WY', 'WY'),
         ]
     )
+
+    address = StringField(
+        'address', validators=[DataRequired()]
+    )
+
     phone = StringField(
         # TODO implement validation logic for state
         'phone'

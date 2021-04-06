@@ -59,6 +59,7 @@ class Artist(db.Model):
     state = db.Column(db.String(120))
     phone = db.Column(db.String(120))
     genres = db.Column(db.String(120))
+    address = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
     website_link = db.Column(db.String(120))
@@ -240,7 +241,7 @@ def create_venue_submission():
             flash('Venue ' + request.form['name'] + ' was successfully listed!')
         except ValueError as e:
             print(e)
-            flash('An error occurred. Venue ' + data.name + ' could not be listed.')
+            flash('An error occurred. Venue ' + request.form['name'] + ' could not be listed.')
             db.session.rollback()
         finally:
             db.session.close()
@@ -252,27 +253,11 @@ def create_venue_submission():
 
     return render_template('pages/home.html')
 
-#     Also, in edit action you can pre-populate a form with values retrieved from the database. For example:
-#
-# venue = Venue.query.first_or_404(venue_id)
-# form = VenueForm(obj=venue)
-# return render_template('forms/edit_venue.html', form=form, venue=venue)
-
-  # TODO: insert form data as a new Venue record in the db, instead
-  # TODO: modify data to be the data object returned from db insertion
-
-  # on successful db insert, flash success
-  #flash('Venue ' + request.form['name'] + ' was successfully listed!')
-  # TODO: on unsuccessful db insert, flash an error instead.
-  # e.g., flash('An error occurred. Venue ' + data.name + ' could not be listed.')
-  # see: http://flask.pocoo.org/docs/1.0/patterns/flashing/
-
 
 @app.route('/venues/<venue_id>', methods=['DELETE'])
 def delete_venue(venue_id):
   # TODO: Complete this endpoint for taking a venue_id, and using
   # SQLAlchemy ORM to delete a record. Handle cases where the session commit could fail.
-
   # BONUS CHALLENGE: c, have it so that
   # clicking that button delete it from the db then redirect the user to the homepage
     error = False
@@ -386,29 +371,35 @@ def show_artist(artist_id):
 #  ----------------------------------------------------------------
 @app.route('/artists/<int:artist_id>/edit', methods=['GET'])
 def edit_artist(artist_id):
-  form = ArtistForm()
-  artist={
-    "id": 4,
-    "name": "Guns N Petals",
-    "genres": ["Rock n Roll"],
-    "city": "San Francisco",
-    "state": "CA",
-    "phone": "326-123-5000",
-    "website": "https://www.gunsnpetalsband.com",
-    "facebook_link": "https://www.facebook.com/GunsNPetals",
-    "seeking_venue": True,
-    "seeking_description": "Looking for shows to perform at in the San Francisco Bay Area!",
-    "image_link": "https://images.unsplash.com/photo-1549213783-8284d0336c4f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80"
-  }
-  # TODO: populate form with fields from artist with ID <artist_id>
-  return render_template('forms/edit_artist.html', form=form, artist=artist)
+    artist = Artist.query.get(artist_id)
+    form = ArtistForm(obj=artist)
+    return render_template('forms/edit_artist.html', form=form, artist=artist)
 
 @app.route('/artists/<int:artist_id>/edit', methods=['POST'])
 def edit_artist_submission(artist_id):
   # TODO: take values from the form submitted, and update existing
   # artist record with ID <artist_id> using the new attributes
+    form = VenueForm(request.form, meta={'csrf': False})
+    if form.validate():
+        try:
+            artist = Artist.query.get(artist_id)
+            form.populate_obj(artist)
+            db.session.commit()
+            flash('Artist ' + request.form['name'] + ' was successfully edited!')
+        except ValueError as e:
+            print(e)
+            flash('An error occurred. Artist ' + request.form['name'] + ' could not be listed.')
+            db.session.rollback()
+        finally:
+            db.session.close()
+    else:
+        message=[]
+        for field, err in form.errors.items():
+            message.append(field + " " + "|".join(err))
+        flash("Errors " +  str(message))
 
-  return redirect(url_for('show_artist', artist_id=artist_id))
+
+    return redirect(url_for('show_artist', artist_id=artist_id))
 
 @app.route('/venues/<int:venue_id>/edit', methods=['GET'])
 def edit_venue(venue_id):
@@ -431,7 +422,7 @@ def edit_venue_submission(venue_id):
             flash('Venue ' + request.form['name'] + ' was successfully edited!')
         except ValueError as e:
             print(e)
-            flash('An error occurred. Venue ' + data.name + ' could not be listed.')
+            flash('An error occurred. Venue ' + request.form['name'] + ' could not be listed.')
             db.session.rollback()
         finally:
             db.session.close()
@@ -531,7 +522,7 @@ def create_show_submission():
             flash('Show was successfully listed!')
         except ValueError as e:
             print(e)
-            flash('An error occurred. Show ' + data.name + ' could not be listed.')
+            flash('An error occurred. Show ' + request.form['name'] + ' could not be listed.')
             db.session.rollback()
         finally:
             db.session.close()
