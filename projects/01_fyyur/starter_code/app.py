@@ -225,7 +225,7 @@ def show_venue(venue_id):
         "past_shows_count": len(past_shows),
         "upcoming_shows_count": len(upcoming_shows)
     }
-    
+
     #data = list(filter(lambda d: d['id'] == venue_id, [data1, data2, data3]))[0]
     return render_template('pages/show_venue.html', venue=data)
 
@@ -282,10 +282,28 @@ def delete_venue(venue_id):
   # TODO: Complete this endpoint for taking a venue_id, and using
   # SQLAlchemy ORM to delete a record. Handle cases where the session commit could fail.
 
-  # BONUS CHALLENGE: Implement a button to delete a Venue on a Venue Page, have it so that
+  # BONUS CHALLENGE: c, have it so that
   # clicking that button delete it from the db then redirect the user to the homepage
+    error = False
+    try:
+        venue = Venue.query.get(venue_id)
+        print("DELETE ID", venue.id)
+        db.session.delete(venue)
+        db.session.commit()
+    except Exception as e:
+        error = True
+        print(f"Error ==> {e}")
+        db.session.rollback()
+    finally:
+        db.session.close()
+    if error:
+        flash(f"An error occured. Venue {venue.name} couldn't be deleted.")
+        abourt(400)
+    else:
+        flash(f"Venue {venue.name} was successfully deleted.")
 
-    return None
+    return redirect(url_for('venues')) # where flash shows up after db deletion,
+                                       # but gets redirected to the main page from the js
 
 #  Artists
 #  ----------------------------------------------------------------
