@@ -62,7 +62,7 @@ class Artist(db.Model):
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
     website_link = db.Column(db.String(120))
-    seeking_venues = db.Column(db.Boolean, default = False)
+    seeking_venue = db.Column(db.Boolean, default = False)
     seeking_description = db.Column(db.String(120))
     shows = db.relationship('Show', backref = 'artists', lazy=True)
 
@@ -423,7 +423,8 @@ def show_artist(artist_id):
         "city": artist.city,
         "state": artist.state,
         "phone": artist.phone,
-        "seeking_venue": artist.seeking_talent
+        "seeking_venue": artist.seeking_venue,
+
 
     })
 
