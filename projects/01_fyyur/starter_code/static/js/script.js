@@ -17,3 +17,18 @@ if (deleteVenue != null) {
         })
     })
 }
+
+const deleteArtist = document.querySelector("#delete-artist");
+if (deleteArtist != null) {
+    deleteArtist.addEventListener("click", (e) => {
+        e.preventDefault();
+        console.log("deleteArtist", e)
+        const deleteId = e.target.dataset["id"];
+        fetch ("/artist/" + deleteId, {
+            method:"DELETE"
+        })
+        .then( (response) => {  
+            window.location = "/artists";
+        })
+    })
+}

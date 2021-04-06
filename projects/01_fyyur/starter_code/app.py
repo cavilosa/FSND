@@ -328,7 +328,7 @@ def show_artist(artist_id):
     data = {}
     current_date = datetime.now()
     artist = Artist.query.get(artist_id);
-    print("ARTISTS", artist.name)
+    print("ARTISTS genres", artist.genres, artist.name)
     shows = Show.query.filter_by(artist_id = artist_id)
     #print("SHOWS", len(shows))
     past_shows = []
@@ -443,6 +443,27 @@ def create_artist_form():
   form = ArtistForm()
   return render_template('forms/new_artist.html', form=form)
 
+@app.route("/artist/<artist_id>", methods=["DELETE"])
+def delete_artist(artist_id):
+    error = False
+    try:
+        artist = Artist.query.get(artist_id)
+        db.session.delete(artist)
+        db.session.commit()
+    except ValueError as e:
+        error = True
+        print(f"Error ==> {e}")
+        db.session.rollback()
+    finally:
+        db.session.close()
+    if error:
+        flash(f"An error occured. Artist {artist.name} couldn't be deleted.")
+        abourt(400)
+    else:
+        flash(f"Artist {artist.name} was successfully deleted.")
+    return redirect(url_for("artists"))
+
+
 
 @app.route('/artists/create', methods=['POST'])
 def create_artist_submission():
@@ -453,7 +474,11 @@ def create_artist_submission():
     if form.validate():
         try:
             artist = Artist()
+            artist.genres = form.genres
+            print("ARTIst", artist.genres)
             form.populate_obj(artist)
+            print("ARTIST GENRES", artist.genres)
+            print("FORM", form['genres'])
             db.session.add(artist)
             db.session.commit()
             flash('Artist ' + request.form['name'] + ' was successfully listed!')
@@ -476,7 +501,7 @@ def create_artist_submission():
 
 @app.route('/shows')
 def shows():
-    
+
     data = []
 
     shows = Show.query.all()
