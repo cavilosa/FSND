@@ -13,6 +13,7 @@ from logging import Formatter, FileHandler
 from flask_wtf import Form
 from forms import *
 from flask_migrate import Migrate
+from datetime import datetime
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
@@ -170,41 +171,41 @@ def show_venue(venue_id):
   #print("venue id", venue_id)
 
     venues = Venue.query.filter(Venue.id == venue_id).all()
+    past_shows = []
+    upcoming_shows = []
     for venue in venues:
-        print("venue", venue.id, len(venues))
+        print("venue id, len", venue.id, len(venues))
         shows = venue.shows
         print("venue.shows", len(shows))
         for show in shows:
             current_date = datetime.now()
-            print("current time, start_time", current_date, show.start_time)
-            past_shows = []
-            upcoming_shows = []
-            print(type(show.start_time.strftime("%d/%m/%Y, %H:%M")))
-            print("types of dates", type(str(current_date)), type(str(show.start_time)))
+            #print(type(str(current_date)), type(str(show.start_time)))
+            if str(show.start_time) < str(current_date):
+                #print("past shows",str(show.start_time), str(current_date))
+                artist = Artist.query.get(show.artist_id)
+                print("artist.id", artist.id)
+                past_shows.append({
+                    "artist_id": show.artist_id,
+                    "artist_name": artist.name,
+                    "artist_image_link": artist.image_link,
+                    "start_time": str(show.start_time)
+                })
 
-            # FISISH!!!!!!
-
-            # if show.start_time.strftime("%m/%d/%Y, %H:%M") > current_date.strftime("%m/%d/%Y, %H:%M"):
-            #     artist = Artist.query.get(show.artist_id)
-            #     past_shows.append(
-            #         {
-            #             "artist_id": show.artist_id,
-            #             "artist_name": artist.name,
-            #             "artist_image_link": artist.image_link,
-            #             "start_time": show.start_time
-            #         }
-            #     )
-            # else:
-            #     artist = Artist.query.get(show.artist_id)
-            #     upcoming_shows.append(
-            #         {
-            #             "artist_id": show.artist_id,
-            #             "artist_name": artist.name,
-            #             "artist_image_link": artist.image_link,
-            #             "start_time": show.start_time
-            #         }
-            #     )
-
+                print("past_shows", len(past_shows), past_shows)
+            elif str(show.start_time) > str(current_date) :
+                print("upcoming_shows", str(show.start_time), str(current_date))
+                # print("upcoming_shows", len(upcoming_shows), upcoming_shows)
+                artist = Artist.query.get(show.artist_id)
+                print("artist.id", artist.id)
+                upcoming_shows.append(
+                    {
+                        "artist_id": show.artist_id,
+                        "artist_name": artist.name,
+                        "artist_image_link": artist.image_link,
+                        "start_time": str(show.start_time)
+                    }
+                )
+                print("upcoming_shows", upcoming_shows)
 
     data =  {
         "id": venue.id,
