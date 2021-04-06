@@ -2,6 +2,7 @@
 {% block title %}Fyyur | Artists{% endblock %}
 {% block content %}
 <ul class="items">
+	<h3>For now we have {{ count }} registered artists</h3>
 	{% for artist in artists %}
 	<li>
 		<a href="/artists/{{ artist.id }}">
