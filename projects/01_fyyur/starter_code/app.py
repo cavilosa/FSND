@@ -360,6 +360,7 @@ def show_artist(artist_id):
         "seeking_venue": artist.seeking_venue,
         "image_link": artist.image_link,
         "past_shows": past_shows,
+        "seeking_description": artist.seeking_description,
         "upcoming_shows": upcoming_shows,
         "past_shows_count": len(past_shows),
         "upcoming_shows_count": len(upcoming_shows)
@@ -442,18 +443,33 @@ def create_artist_form():
   form = ArtistForm()
   return render_template('forms/new_artist.html', form=form)
 
+
 @app.route('/artists/create', methods=['POST'])
 def create_artist_submission():
   # called upon submitting the new artist listing form
   # TODO: insert form data as a new Venue record in the db, instead
   # TODO: modify data to be the data object returned from db insertion
+    form = ArtistForm(request.form, meta={'csrf': False})
+    if form.validate():
+        try:
+            artist = Artist()
+            form.populate_obj(artist)
+            db.session.add(artist)
+            db.session.commit()
+            flash('Artist ' + request.form['name'] + ' was successfully listed!')
+        except ValueError as e:
+            print(e)
+            flash('An error occurred. Artist ' + request.form['name'] + ' could not be listed.')
+            db.session.rollback()
+        finally:
+            db.session.close()
+    else:
+        message=[]
+        for field, err in form.errors.items():
+            message.append(field + " " + "|".join(err))
+        flash("Errors" +  str(message))
 
-  # on successful db insert, flash success
-  flash('Artist ' + request.form['name'] + ' was successfully listed!')
-  # TODO: on unsuccessful db insert, flash an error instead.
-  # e.g., flash('An error occurred. Artist ' + data.name + ' could not be listed.')
-  return render_template('pages/home.html')
-
+    return render_template('pages/home.html')
 
 #  Shows
 #  ----------------------------------------------------------------
