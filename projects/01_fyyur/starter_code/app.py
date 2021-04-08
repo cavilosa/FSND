@@ -197,11 +197,11 @@ def show_venue(venue_id):
                     }
                 )
                 #print("upcoming_shows", upcoming_shows)
-
+    genres = venue.genres.replace("{", "").replace("}", "")
     data =  {
         "id": venue.id,
         "name": venue.name,
-        "genres": venue.genres,
+        "genres": genres,
         "address": venue.address,
         "city": venue.city,
         "state": venue.state,
@@ -349,7 +349,7 @@ def show_artist(artist_id):
                 "venue_image_link": venue.image_link,
                 "start_time": str(show.start_time)
             })
-            
+
     genres = artist.genres.replace("{", "").replace("}", "")
 
     data.update({
