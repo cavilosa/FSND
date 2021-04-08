@@ -3,6 +3,17 @@ from flask_wtf import Form
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField, validators
 from wtforms.validators import InputRequired, AnyOf, URL
+# from wtforms import ValidationError
+# from flask import flash
+
+# def is_integer(form, field):
+#     for each in field.data:
+#         print (each)
+#         if type(each) != int:
+#             raise ValidationError("Phone number can only have numbers in it")
+
+
+
 
 class ShowForm(FlaskForm):
     artist_id = StringField(
