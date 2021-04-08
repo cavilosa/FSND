@@ -6,16 +6,17 @@ from wtforms.validators import InputRequired, AnyOf, URL
 
 class ShowForm(FlaskForm):
     artist_id = StringField(
-        'artist_id', [validators.InputRequired()]
+        'artist_id', [validators.InputRequired(), validators.NumberRange()]
     )
     venue_id = StringField(
-        'venue_id', [validators.InputRequired()]
+        'venue_id', [validators.InputRequired(), validators.NumberRange()]
     )
     start_time = DateTimeField(
         'start_time',
         validators=[InputRequired()],
         default= datetime.today()
     )
+
 
 class VenueForm(FlaskForm):
     name = StringField(

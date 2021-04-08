@@ -1,16 +1,23 @@
 from flask_sqlalchemy import SQLAlchemy
-from flask import Flask
-from flask_moment import Moment
+# from flask import Flask
+# from flask_moment import Moment
 from flask_migrate import Migrate
 
-app = Flask(__name__)
+# app = Flask(__name__)
 # moment = Moment(app)
 # app.config.from_object('config')
 # db = SQLAlchemy(app)
 #
 # migrate = Migrate(app, db)
 
-db = SQLAlchemy(app)
+db = SQLAlchemy()
+
+def setup_db(app):
+    app.config.from_object('config')
+    db.app = app
+    db.init_app(app)
+    Migrate(app, db)
+    return db
 #----------------------------------------------------------------------------#
 # Models.
 #----------------------------------------------------------------------------#
