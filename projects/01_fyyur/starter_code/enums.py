@@ -24,7 +24,7 @@ class Genre(enum.Enum):
 
     @classmethod
     def choices(cls):
-      return [ (choice.value, choice.value) for choice in cls ]
+      return [ (choice.name, choice.value) for choice in cls ]
 
 class State(enum.Enum):
     AL ='AL'
@@ -81,4 +81,4 @@ class State(enum.Enum):
 
     @classmethod
     def choices(cls):
-        return [ (choice.value, choice.value) for choice in cls]
+        return [ (choice.name, choice.value) for choice in cls]
