@@ -14,7 +14,6 @@ from wtforms.validators import InputRequired, AnyOf, URL
 
 
 
-
 class ShowForm(FlaskForm):
     artist_id = StringField(
         'artist_id', [validators.InputRequired(), validators.NumberRange()]
