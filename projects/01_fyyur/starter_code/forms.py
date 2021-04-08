@@ -3,6 +3,8 @@ from flask_wtf import Form
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField, validators
 from wtforms.validators import InputRequired, AnyOf, URL
+from enums import Genre, State
+#import enum
 # from wtforms import ValidationError
 # from flask import flash
 
@@ -12,6 +14,18 @@ from wtforms.validators import InputRequired, AnyOf, URL
 #         if type(each) != int:
 #             raise ValidationError("Phone number can only have numbers in it")
 
+# def validate(self):
+#     rv = FlaskForm.validate(self)
+#     if not rv:
+#         return False
+#     if not all(elements in self.genres.data for elements in Genre.choices()):
+#         self.genres.errors.append("Choose genres from the list")
+#         return False
+#     if not all(elements in self.state.data for elements in State.choices()):
+#         self.genres.errors.append("Chooise states from the list")
+#         return False
+#     else:
+#         return True
 
 
 class ShowForm(FlaskForm):
@@ -37,59 +51,7 @@ class VenueForm(FlaskForm):
     )
     state = SelectField(
         'state', validators=[InputRequired()],
-        choices=[
-            ('AL', 'AL'),
-            ('AK', 'AK'),
-            ('AZ', 'AZ'),
-            ('AR', 'AR'),
-            ('CA', 'CA'),
-            ('CO', 'CO'),
-            ('CT', 'CT'),
-            ('DE', 'DE'),
-            ('DC', 'DC'),
-            ('FL', 'FL'),
-            ('GA', 'GA'),
-            ('HI', 'HI'),
-            ('ID', 'ID'),
-            ('IL', 'IL'),
-            ('IN', 'IN'),
-            ('IA', 'IA'),
-            ('KS', 'KS'),
-            ('KY', 'KY'),
-            ('LA', 'LA'),
-            ('ME', 'ME'),
-            ('MT', 'MT'),
-            ('NE', 'NE'),
-            ('NV', 'NV'),
-            ('NH', 'NH'),
-            ('NJ', 'NJ'),
-            ('NM', 'NM'),
-            ('NY', 'NY'),
-            ('NC', 'NC'),
-            ('ND', 'ND'),
-            ('OH', 'OH'),
-            ('OK', 'OK'),
-            ('OR', 'OR'),
-            ('MD', 'MD'),
-            ('MA', 'MA'),
-            ('MI', 'MI'),
-            ('MN', 'MN'),
-            ('MS', 'MS'),
-            ('MO', 'MO'),
-            ('PA', 'PA'),
-            ('RI', 'RI'),
-            ('SC', 'SC'),
-            ('SD', 'SD'),
-            ('TN', 'TN'),
-            ('TX', 'TX'),
-            ('UT', 'UT'),
-            ('VT', 'VT'),
-            ('VA', 'VA'),
-            ('WA', 'WA'),
-            ('WV', 'WV'),
-            ('WI', 'WI'),
-            ('WY', 'WY'),
-        ]
+        choices=State.choices()
     )
     address = StringField(
         'address', validators=[InputRequired()]
@@ -102,28 +64,10 @@ class VenueForm(FlaskForm):
     )
     genres = SelectMultipleField(
         # TODO implement enum restriction
-        'genres', validators=[InputRequired()],
-        choices=[
-            ('Alternative', 'Alternative'),
-            ('Blues', 'Blues'),
-            ('Classical', 'Classical'),
-            ('Country', 'Country'),
-            ('Electronic', 'Electronic'),
-            ('Folk', 'Folk'),
-            ('Funk', 'Funk'),
-            ('Hip-Hop', 'Hip-Hop'),
-            ('Heavy Metal', 'Heavy Metal'),
-            ('Instrumental', 'Instrumental'),
-            ('Jazz', 'Jazz'),
-            ('Musical Theatre', 'Musical Theatre'),
-            ('Pop', 'Pop'),
-            ('Punk', 'Punk'),
-            ('R&B', 'R&B'),
-            ('Reggae', 'Reggae'),
-            ('Rock n Roll', 'Rock n Roll'),
-            ('Soul', 'Soul'),
-            ('Other', 'Other'),
-        ]
+        'genres',
+        validators=[InputRequired()],
+        choices=Genre.choices()
+
     )
 
     facebook_link = StringField(
@@ -140,6 +84,21 @@ class VenueForm(FlaskForm):
         'seeking_description', [validators.Optional()]
     )
 
+    def validate(self):
+        rv = FlaskForm.validate(self)
+        if not rv:
+            return False
+        if not all(self.genres.data for choice in Genre):
+            self.genres.errors.append("Choose genres from the list")
+            return False
+        if not all(self.state.data for choice in State):
+            self.genres.errors.append("Chooise states from the list")
+            return False
+        else:
+            return True
+
+
+
 
 class ArtistForm(FlaskForm):
     name = StringField(
@@ -149,60 +108,9 @@ class ArtistForm(FlaskForm):
         'city', validators=[InputRequired()]
     )
     state = SelectField(
-        'state', validators=[InputRequired()],
-        choices=[
-            ('AL', 'AL'),
-            ('AK', 'AK'),
-            ('AZ', 'AZ'),
-            ('AR', 'AR'),
-            ('CA', 'CA'),
-            ('CO', 'CO'),
-            ('CT', 'CT'),
-            ('DE', 'DE'),
-            ('DC', 'DC'),
-            ('FL', 'FL'),
-            ('GA', 'GA'),
-            ('HI', 'HI'),
-            ('ID', 'ID'),
-            ('IL', 'IL'),
-            ('IN', 'IN'),
-            ('IA', 'IA'),
-            ('KS', 'KS'),
-            ('KY', 'KY'),
-            ('LA', 'LA'),
-            ('ME', 'ME'),
-            ('MT', 'MT'),
-            ('NE', 'NE'),
-            ('NV', 'NV'),
-            ('NH', 'NH'),
-            ('NJ', 'NJ'),
-            ('NM', 'NM'),
-            ('NY', 'NY'),
-            ('NC', 'NC'),
-            ('ND', 'ND'),
-            ('OH', 'OH'),
-            ('OK', 'OK'),
-            ('OR', 'OR'),
-            ('MD', 'MD'),
-            ('MA', 'MA'),
-            ('MI', 'MI'),
-            ('MN', 'MN'),
-            ('MS', 'MS'),
-            ('MO', 'MO'),
-            ('PA', 'PA'),
-            ('RI', 'RI'),
-            ('SC', 'SC'),
-            ('SD', 'SD'),
-            ('TN', 'TN'),
-            ('TX', 'TX'),
-            ('UT', 'UT'),
-            ('VT', 'VT'),
-            ('VA', 'VA'),
-            ('WA', 'WA'),
-            ('WV', 'WV'),
-            ('WI', 'WI'),
-            ('WY', 'WY'),
-        ]
+        'state',
+        validators=[InputRequired()],
+        choices=State.choices()
     )
 
     address = StringField(
@@ -217,28 +125,9 @@ class ArtistForm(FlaskForm):
         'image_link', [validators.Optional(), validators.URL()]
     )
     genres = SelectMultipleField(
-        'genres', validators=[InputRequired()],
-        choices=[
-            ('Alternative', 'Alternative'),
-            ('Blues', 'Blues'),
-            ('Classical', 'Classical'),
-            ('Country', 'Country'),
-            ('Electronic', 'Electronic'),
-            ('Folk', 'Folk'),
-            ('Funk', 'Funk'),
-            ('Hip-Hop', 'Hip-Hop'),
-            ('Heavy Metal', 'Heavy Metal'),
-            ('Instrumental', 'Instrumental'),
-            ('Jazz', 'Jazz'),
-            ('Musical Theatre', 'Musical Theatre'),
-            ('Pop', 'Pop'),
-            ('Punk', 'Punk'),
-            ('R&B', 'R&B'),
-            ('Reggae', 'Reggae'),
-            ('Rock n Roll', 'Rock n Roll'),
-            ('Soul', 'Soul'),
-            ('Other', 'Other'),
-        ]
+        'genres',
+        validators=[InputRequired()],
+        choices=Genre.choices()
      )
     facebook_link = StringField(
         # TODO implement enum restriction
@@ -254,3 +143,16 @@ class ArtistForm(FlaskForm):
     seeking_description = StringField(
             'seeking_description', [validators.Optional()]
      )
+
+    def validate(self):
+        rv = FlaskForm.validate(self)
+        if not rv:
+            return False
+        if not all(self.genres.data for choice in Genre):
+            self.genres.errors.append("Choose genres from the list")
+            return False
+        if not all(self.state.data for choice in State):
+            self.genres.errors.append("Chooise states from the list")
+            return False
+        else:
+            return True
