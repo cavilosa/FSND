@@ -1,7 +1,7 @@
 #----------------------------------------------------------------------------#
 # Imports
 #----------------------------------------------------------------------------#
-
+#from models import Artist, Show, Venue
 import json
 import dateutil.parser
 import babel
@@ -14,9 +14,7 @@ from flask_wtf import Form
 from forms import *
 from flask_migrate import Migrate
 from datetime import datetime
-#----------------------------------------------------------------------------#
-# App Config.
-#----------------------------------------------------------------------------#
+
 
 app = Flask(__name__)
 moment = Moment(app)
@@ -24,8 +22,6 @@ app.config.from_object('config')
 db = SQLAlchemy(app)
 
 migrate = Migrate(app, db)
-
-# TODO: connect to a local postgresql database
 
 #----------------------------------------------------------------------------#
 # Models.
@@ -68,18 +64,21 @@ class Artist(db.Model):
     shows = db.relationship('Show', backref = 'artists', lazy=True)
 
 
+
 class Show(db.Model):
     __tablename__="Show"
     artist_id = db.Column(db.Integer, db.ForeignKey("Artist.id"), nullable=False, primary_key=True)
     venue_id = db.Column(db.Integer, db.ForeignKey("Venue.id"), nullable=False, primary_key=True)
     start_time = db.Column(db.DateTime)
 
-
-    # TODO: implement any missing fields, as a database migration using Flask-Migrate
-
-# TODO Implement Show and Artist models, and complete all model relationships and properties, as a database migration.
-
 #----------------------------------------------------------------------------#
+# App Config.
+#----------------------------------------------------------------------------#
+
+
+# TODO: connect to a local postgresql database
+
+
 # Filters.
 #----------------------------------------------------------------------------#
 
@@ -166,16 +165,16 @@ def show_venue(venue_id):
     past_shows = []
     upcoming_shows = []
     for venue in venues:
-        print("venue id, len", venue.id, len(venues))
+        #print("venue id, len", venue.id, len(venues))
         shows = venue.shows
-        print("venue.shows", len(shows))
+        #print("venue.shows", len(shows))
         for show in shows:
             current_date = datetime.now()
             #print(type(str(current_date)), type(str(show.start_time)))
             if str(show.start_time) < str(current_date):
                 #print("past shows",str(show.start_time), str(current_date))
                 artist = Artist.query.get(show.artist_id)
-                print("artist.id", artist.id)
+                #print("artist.id", artist.id)
                 past_shows.append({
                     "artist_id": show.artist_id,
                     "artist_name": artist.name,
@@ -183,12 +182,12 @@ def show_venue(venue_id):
                     "start_time": str(show.start_time)
                 })
 
-                print("past_shows", len(past_shows), past_shows)
+                #print("past_shows", len(past_shows), past_shows)
             elif str(show.start_time) > str(current_date) :
-                print("upcoming_shows", str(show.start_time), str(current_date))
+                #print("upcoming_shows", str(show.start_time), str(current_date))
                 # print("upcoming_shows", len(upcoming_shows), upcoming_shows)
                 artist = Artist.query.get(show.artist_id)
-                print("artist.id", artist.id)
+                #print("artist.id", artist.id)
                 upcoming_shows.append(
                     {
                         "artist_id": show.artist_id,
@@ -197,7 +196,7 @@ def show_venue(venue_id):
                         "start_time": str(show.start_time)
                     }
                 )
-                print("upcoming_shows", upcoming_shows)
+                #print("upcoming_shows", upcoming_shows)
 
     data =  {
         "id": venue.id,
@@ -350,10 +349,13 @@ def show_artist(artist_id):
                 "venue_image_link": venue.image_link,
                 "start_time": str(show.start_time)
             })
+            
+    genres = artist.genres.replace("{", "").replace("}", "")
+
     data.update({
         "id": artist.id,
         "name": artist.name,
-        "genres": artist.genres,
+        "genres": genres,
         "city": artist.city,
         "state": artist.state,
         "phone": artist.phone,
@@ -365,7 +367,7 @@ def show_artist(artist_id):
         "past_shows_count": len(past_shows),
         "upcoming_shows_count": len(upcoming_shows)
     })
-
+    print("ARTIST", artist)
     return render_template('pages/show_artist.html', artist=data)
 
 #  Update
@@ -406,7 +408,7 @@ def edit_artist_submission(artist_id):
 def edit_venue(venue_id):
     venue = Venue.query.get(venue_id)
     form = VenueForm(obj=venue)
-    print("genres", venue.genres)
+    #print("genres", venue.genres)
     return render_template('forms/edit_venue.html', form=form, venue=venue)
 
 
@@ -419,10 +421,11 @@ def edit_venue_submission(venue_id):
         try:
             venue = Venue.query.get(venue_id)
             form.populate_obj(venue)
+            print("VENUE form populate", venue_id)
             db.session.commit()
             flash('Venue ' + request.form['name'] + ' was successfully edited!')
         except ValueError as e:
-            print(e)
+            print("Error from except in venue edit", e)
             flash('An error occurred. Venue ' + request.form['name'] + ' could not be listed.')
             db.session.rollback()
         finally:
