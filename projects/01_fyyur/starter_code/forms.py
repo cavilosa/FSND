@@ -204,7 +204,7 @@ class ArtistForm(FlaskForm):
         'phone', [validators.Optional()]
     )
     image_link = StringField(
-        'image_link', [validators.Optional()]
+        'image_link', [validators.Optional(), validators.URL()]
     )
     genres = SelectMultipleField(
         'genres', validators=[InputRequired()],
@@ -232,11 +232,11 @@ class ArtistForm(FlaskForm):
      )
     facebook_link = StringField(
         # TODO implement enum restriction
-        'facebook_link', [validators.Optional()]
+        'facebook_link', [validators.Optional(), validators.URL()]
      )
 
     website_link = StringField(
-        'website_link', [validators.Optional()]
+        'website_link', [validators.Optional(), validators.URL()]
      )
 
     seeking_venue = BooleanField( 'seeking_venue', [validators.Optional()] )
