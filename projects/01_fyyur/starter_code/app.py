@@ -326,7 +326,9 @@ def show_artist(artist_id):
     current_date = datetime.now()
     artist = Artist.query.get(artist_id);
     print("ARTISTS genres", artist.genres, artist.name)
-    shows = Show.query.filter_by(artist_id = artist_id)
+    shows = Show.query.filter_by(artist_id = artist_id).all()
+    session_shows = db.session.query(Show).join(Artist).filter(Show.artist_id == artist_id).all()
+    print("SHOWS", len(shows), "SESSSION_SHOW", len(session_shows))
     #print("SHOWS", len(shows))
     past_shows = []
     upcoming_shows = []
