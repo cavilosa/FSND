@@ -229,6 +229,6 @@ h2.monospace {
     color: #adad36;
 }
 
-.recent-list {
-    list-style: none;
+.recent-list li {
+    list-style-type: decimal;
 }

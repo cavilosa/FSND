@@ -31,9 +31,25 @@
 			    <li>
 					{% if artist.image_link %}{{ artist.image_link}}<br>{% endif %}
 				    ARTIST:{{ artist.name }} <br>
+					ID: {{ artist.id }}<br>
 					GENRES:{{ artist.genres }}<br>
 					{% if artist.website_link %}{{ artist.website_link}}<br>{% endif %}
-				    {% if artist.shows %} SHOWS: {{ artist.shows}} {% endif %}
+				    {% if artist.shows %} SHOWS:
+					<ul>
+						{% for show in artist.shows %}
+						    <li>
+								Venue id: {{ show.venue_id }}<br>
+								Venuve name: {{ show.venue_name}}<br>
+								Start time: {{ show.start_time }}
+
+								<br>
+							</li>
+
+					    {% endfor %}
+					</ul>
+
+
+					{% endif %}
 				</li>
 			{% endfor %}
 		</ul>
@@ -48,7 +64,7 @@
 					VENUE NAME: {{ venue.name }} <br>
 					VENUE CITY, STATE: {{ venue.city }}, {{ venue.state }} <br>
 					{% if venue.website_link %}{{ venue.website_link}}<br>{% endif %}
-					{% if venue.shows %} {{ venue.shows}} {% endif %}
+
 				</li>
 
 			{% endfor %}

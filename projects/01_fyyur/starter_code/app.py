@@ -97,17 +97,49 @@ app.jinja_env.filters['datetime'] = format_datetime
 
 @app.route('/')
 def index():
-    artists = Artist.query.limit(10).all()
-    venues =[]
-    data = []
-    shows = []
-    for artist in artists:
-        shows = Show.query.filter(Show.artist_id == artist.id).all()
-        for show in shows:
+    artists = Artist.query.order_by(Artist.date_added.desc()).limit(10)
 
-            print("SHOWS", shows)
-    print("ARTISTS", artists)
-    return render_template('pages/home.html', artists = artists, venues = venues)
+    venues = Venue.query.order_by(Venue.date_added.desc()).limit(10)
+
+    artists_data = []
+    venues_data = []
+
+    for artist in artists:
+        #print("AR", artist.id)
+        # artist_shows = Show.query.filter(Show.artist_id == artist.id).all()
+        # shows = []
+        # for show in artist_shows:
+        #     venue = Venue.query.filter(Venue.id == show.venue_id).first()
+        #     shows.append(
+        #         {
+        #             "venue_id": show.venue_id,
+        #             "venue_name": venue.name,
+        #             "start_time": str(show.start_time)
+        #         }
+        #     )
+        list = Show.query.filter(Show.artist_id == artist.id).all()
+        shows = []
+        for e in list:
+            #print("E", e)
+            venue = Venue.query.filter(Venue.id == e.venue_id).first()
+            shows.append({
+                "venue_id": e.venue_id,
+                "venue_name": venue.name,
+                "start_time": str(e.start_time)
+            })
+
+            artists_data.append({
+                "id": artist.id,
+                "image_link": artist.image_link,
+                "name": artist.name,
+                "genres": artist.genres,
+                "website_link": artist.website_link,
+                "shows": shows
+            })
+            
+
+    #print("DATA", len(artists_data), artists_data[0])
+    return render_template('pages/home.html', artists = artists_data, venues = venues)
 
 
 #  Venues
