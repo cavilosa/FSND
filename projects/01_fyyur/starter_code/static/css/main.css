@@ -209,3 +209,22 @@ h2.monospace {
 .subtitle {
   opacity: 0.5;
 }
+
+.recently-added {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-around;
+    margin: 20px;
+}
+
+.recently-added-artists,
+.recently-added-venues {
+    display: flex;
+    flex-flow: column;
+    padding: 10px;
+}
+
+.recent {
+    font-size: 20px;
+    color: #adad36;
+}
