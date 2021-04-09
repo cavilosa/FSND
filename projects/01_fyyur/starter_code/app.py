@@ -105,22 +105,12 @@ def index():
     venues_data = []
 
     for artist in artists:
-        #print("AR", artist.id)
-        # artist_shows = Show.query.filter(Show.artist_id == artist.id).all()
-        # shows = []
-        # for show in artist_shows:
-        #     venue = Venue.query.filter(Venue.id == show.venue_id).first()
-        #     shows.append(
-        #         {
-        #             "venue_id": show.venue_id,
-        #             "venue_name": venue.name,
-        #             "start_time": str(show.start_time)
-        #         }
-        #     )
+
         list = Show.query.filter(Show.artist_id == artist.id).all()
         shows = []
         for e in list:
             #print("E", e)
+            print("ARTIST", artist.id)
             venue = Venue.query.filter(Venue.id == e.venue_id).first()
             shows.append({
                 "venue_id": e.venue_id,
@@ -129,17 +119,15 @@ def index():
             })
             print("format datetime", format_datetime(str(e.start_time)))
 
-            artists_data.append({
-                "id": artist.id,
-                "image_link": artist.image_link,
-                "name": artist.name,
-                "genres": artist.genres,
-                "website_link": artist.website_link,
-                "shows": shows
-            })
+        artists_data.append({
+            "id": artist.id,
+            "image_link": artist.image_link,
+            "name": artist.name,
+            "genres": artist.genres,
+            "website_link": artist.website_link,
+            "shows": shows
+        })
 
-
-    #print("DATA", len(artists_data), artists_data[0])
     return render_template('pages/home.html', artists = artists_data, venues = venues)
 
 
