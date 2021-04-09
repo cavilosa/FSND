@@ -125,8 +125,9 @@ def index():
             shows.append({
                 "venue_id": e.venue_id,
                 "venue_name": venue.name,
-                "start_time": str(e.start_time)
+                "start_time": format_datetime(str(e.start_time))
             })
+            print("format datetime", format_datetime(str(e.start_time)))
 
             artists_data.append({
                 "id": artist.id,
@@ -136,7 +137,7 @@ def index():
                 "website_link": artist.website_link,
                 "shows": shows
             })
-            
+
 
     #print("DATA", len(artists_data), artists_data[0])
     return render_template('pages/home.html', artists = artists_data, venues = venues)

@@ -38,8 +38,8 @@
 					<ul>
 						{% for show in artist.shows %}
 						    <li>
-								Venue id: {{ show.venue_id }}<br>
-								Venuve name: {{ show.venue_name}}<br>
+								<a href="/venues/{{ show.venue_id }}">{{ show.venue_name}}</a><br>
+								<!-- Venuve name: {{ show.venue_name}}<br> -->
 								Start time: {{ show.start_time }}
 
 								<br>
