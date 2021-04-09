@@ -27,7 +27,7 @@
     <div class="recently-added-artists">
         <h3 class="recent">Recently added artists</h3>
 		{% for artist in artists %}
-		    {% if artist.image_link %}{{ artist.picture}}{% endif %}
+		    {% if artist.image_link %}{{ artist.image_link}}{% endif %}
 		    {{ artist.name }}
 			{{ artist.genres }}
 			{% if artist.website_link %}{{ artist.website_link}}{% endif %}
@@ -36,6 +36,13 @@
     </div>
 	<div class="recently-added-venues">
         <h3 class="recent">Recently added venues</h3>
+		{% for venue in venues %}
+			{% if venue.image_link %}{{ venue.image_link}}{% endif %}
+			{{ venue.name }}
+			{{ venue.city }}, {{ venue.state }}
+			{% if venue.website_link %}{{ venue.website_link}}{% endif %}
+			{% if venue.shows %} {{ venue.shows}} {% endif %}
+		{% endfor %}
 	</div>
 
 </div>
