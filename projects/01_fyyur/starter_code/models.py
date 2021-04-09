@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 # from flask import Flask
 # from flask_moment import Moment
 from flask_migrate import Migrate
+import datetime
 
 # app = Flask(__name__)
 # moment = Moment(app)
@@ -37,6 +38,7 @@ class Venue(db.Model):
     website_link = db.Column(db.String(120))
     seeking_talent = db.Column(db.Boolean, default = False)
     seeking_description = db.Column(db.String(120))
+    date_added = db.Column(db.DateTime, default = datetime.datetime.utcnow())
     shows = db.relationship('Show', backref = 'venues', lazy=True)
 
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
@@ -56,6 +58,7 @@ class Artist(db.Model):
     website_link = db.Column(db.String(120))
     seeking_venue = db.Column(db.Boolean, default = False)
     seeking_description = db.Column(db.String(120))
+    date_added = db.Column(db.DateTime, default = datetime.datetime.utcnow())
     shows = db.relationship('Show', backref = 'artists', lazy=True)
 
 

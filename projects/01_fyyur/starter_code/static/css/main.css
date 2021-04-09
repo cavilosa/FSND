@@ -228,3 +228,7 @@ h2.monospace {
     font-size: 20px;
     color: #adad36;
 }
+
+.recent-list {
+    list-style: none;
+}
