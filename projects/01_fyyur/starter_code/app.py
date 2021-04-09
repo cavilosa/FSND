@@ -156,9 +156,6 @@ def search_venues():
 
 @app.route('/venues/<int:venue_id>')
 def show_venue(venue_id):
-  # shows the venue page with the given venue_id
-  # TODO: replace with real venue data from the venues table, using venue_id
-  #print("venue id", venue_id)
 
     venues = Venue.query.filter(Venue.id == venue_id).all()
     past_shows = []
@@ -166,6 +163,8 @@ def show_venue(venue_id):
     for venue in venues:
         #print("venue id, len", venue.id, len(venues))
         shows = venue.shows
+        session_shows = db.session.query(Show).join(Venue).filter(Show.venue_id == venue_id).all()
+        print("SESSION SHOWS", session_shows, "SHOWS", shows)
         #print("venue.shows", len(shows))
         for show in shows:
             current_date = datetime.now()
