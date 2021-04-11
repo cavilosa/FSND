@@ -119,12 +119,12 @@ def index():
                 "start_time": format_datetime(str(e.start_time))
             })
             print("format datetime", format_datetime(str(e.start_time)))
-
+        genres = artist.genres.replace("{", "").replace("}", "")
         artists_data.append({
             "id": artist.id,
             "image_link": artist.image_link,
             "name": artist.name,
-            "genres": artist.genres,
+            "genres": genres,
             "website_link": artist.website_link,
             "shows": shows
         })
