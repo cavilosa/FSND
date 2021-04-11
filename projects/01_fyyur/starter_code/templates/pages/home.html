@@ -25,35 +25,37 @@
 
 <div class="recently-added">
     <div class="recently-added-artists">
-        <h3 class="recent">Recently added artists</h3>
+		{% if artists %}
+		<h3 class="recent">Recently added artists</h3>
 		<ul class="recent-list">
 			{% for artist in artists %}
-			    <li>
+				<li>
 					{% if artist.image_link %}{{ artist.image_link}}<br>{% endif %}
-				    ARTIST:{{ artist.name }} <br>
-					<!-- ID: {{ artist.id }}<br> -->
+					ARTIST:{{ artist.name }} <br>
+					ID: {{ artist.id }}<br>
 					GENRES:{{ artist.genres }}<br>
 					{% if artist.website_link %}{{ artist.website_link}}<br>{% endif %}
-				    {% if artist.shows %} SHOWS:
+					{% if artist.shows %} SHOWS:
 					<ul>
 						{% for show in artist.shows %}
-						    <li>
+							<li>
 								<a href="/venues/{{ show.venue_id }}">{{ show.venue_name}}</a><br>
-								<!-- Venuve name: {{ show.venue_name}}<br> -->
+								Venuve name: {{ show.venue_name}}<br>
 								Start time: {{ show.start_time }}
 
 								<br>
 							</li>
 
-					    {% endfor %}
+						{% endfor %}
 					</ul>
-					{% endif %}--
+					{% endif %}
 				 </li>
 			{% endfor %}
 		</ul>
-
+		{% endif %}
     </div>
 	<div class="recently-added-venues">
+		{% if venues %}
         <h3 class="recent">Recently added venues</h3>
 		<ul class="recent-list">
 			{% for venue in venues %}
@@ -67,8 +69,7 @@
 
 			{% endfor %}
 		</ul>
-
+		{% endif %}
 	</div>
-
 </div>
 {% endblock %}

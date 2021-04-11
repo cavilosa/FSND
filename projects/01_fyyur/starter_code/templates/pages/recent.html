@@ -1,0 +1,51 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Fyyur{% endblock %}
+{% block recent %}
+<div class="recently-added">
+    <div class="recently-added-artists">
+        <h3 class="recent">Recently added artists</h3>
+		<ul class="recent-list">
+			{% for artist in artists %}
+			    <li>
+					{% if artist.image_link %}{{ artist.image_link}}<br>{% endif %}
+				    ARTIST:{{ artist.name }} <br>
+					<!-- ID: {{ artist.id }}<br> -->
+					GENRES:{{ artist.genres }}<br>
+					{% if artist.website_link %}{{ artist.website_link}}<br>{% endif %}
+				    {% if artist.shows %} SHOWS:
+					<ul>
+						{% for show in artist.shows %}
+						    <li>
+								<a href="/venues/{{ show.venue_id }}">{{ show.venue_name}}</a><br>
+								<!-- Venuve name: {{ show.venue_name}}<br> -->
+								Start time: {{ show.start_time }}
+
+								<br>
+							</li>
+
+					    {% endfor %}
+					</ul>
+					{% endif %}
+				 </li>
+			{% endfor %}
+		</ul>
+
+    </div>
+	<div class="recently-added-venues">
+        <h3 class="recent">Recently added venues</h3>
+		<ul class="recent-list">
+			{% for venue in venues %}
+			    <li>
+					{% if venue.image_link %}{{ venue.image_link}}<br>{% endif %}
+					VENUE NAME:<a href="/venues/{{ venue.id }}"> {{ venue.name }}</a><br>
+					CITY: {{ venue.city }}, STATE: {{ venue.state }} <br>
+					{% if venue.website_link %}{{ venue.website_link}}<br>{% endif %}
+
+				</li>
+
+			{% endfor %}
+		</ul>
+
+	</div>
+
+</div>
