@@ -213,7 +213,7 @@ h2.monospace {
 .recently-added {
     display: flex;
     flex-flow: row;
-    justify-content: space-around;
+    justify-content: space-between;
     margin: 20px;
 }
 
@@ -222,6 +222,7 @@ h2.monospace {
     display: flex;
     flex-flow: column;
     padding: 10px;
+
 }
 
 .recent {
@@ -231,4 +232,8 @@ h2.monospace {
 
 .recent-list li {
     list-style-type: decimal;
+}
+
+li {
+    padding: 10px;
 }

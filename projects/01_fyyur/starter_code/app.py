@@ -100,7 +100,7 @@ def index():
     artists = Artist.query.order_by(Artist.date_added).limit(10)
 
     venues = Venue.query.order_by(Venue.date_added).limit(10)
-    print("VEBUES", venues[0].id)
+    # print("VEBUES", venues[0].id)
 
     artists_data = []
     venues_data = []
@@ -111,14 +111,14 @@ def index():
         shows = []
         for e in list:
             #print("E", e)
-            print("ARTIST", artist.id)
+            # print("ARTIST", artist.id)
             venue = Venue.query.filter(Venue.id == e.venue_id).first()
             shows.append({
                 "venue_id": e.venue_id,
                 "venue_name": venue.name,
                 "start_time": format_datetime(str(e.start_time))
             })
-            print("format datetime", format_datetime(str(e.start_time)))
+            # print("format datetime", format_datetime(str(e.start_time)))
         genres = artist.genres.replace("{", "").replace("}", "")
         artists_data.append({
             "id": artist.id,
