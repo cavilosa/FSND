@@ -30,10 +30,10 @@ from enums import Genre, State
 
 class ShowForm(FlaskForm):
     artist_id = StringField(
-        'artist_id', [validators.InputRequired(), validators.NumberRange()]
+        'artist_id', [validators.InputRequired()]
     )
     venue_id = StringField(
-        'venue_id', [validators.InputRequired(), validators.NumberRange()]
+        'venue_id', [validators.InputRequired()]
     )
     start_time = DateTimeField(
         'start_time',

@@ -568,6 +568,7 @@ def create_show_submission():
     # called to create new shows in the db, upon submitting new show listing form
     # TODO: insert form data as a new Show record in the db, instead
     form = ShowForm(request.form, meta={'csrf': False})
+    print("FORM", form.artist_id)
     if form.validate():
         try:
             show = Show()
