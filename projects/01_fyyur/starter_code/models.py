@@ -39,7 +39,7 @@ class Venue(db.Model):
     seeking_talent = db.Column(db.Boolean, default = False)
     seeking_description = db.Column(db.String(120))
     date_added = db.Column(db.DateTime, default = datetime.datetime.utcnow())
-    shows = db.relationship('Show', backref = 'venues', lazy=True)
+    shows = db.relationship('Show', backref = 'venues', cascade='all, delete', lazy=True)
 
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
 
@@ -59,7 +59,7 @@ class Artist(db.Model):
     seeking_venue = db.Column(db.Boolean, default = False)
     seeking_description = db.Column(db.String(120))
     date_added = db.Column(db.DateTime, default = datetime.datetime.utcnow())
-    shows = db.relationship('Show', backref = 'artists', lazy=True)
+    shows = db.relationship('Show', backref = 'artists', cascade='all, delete', lazy=True)
 
 
 class Show(db.Model):
