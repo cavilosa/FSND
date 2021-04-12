@@ -40,7 +40,7 @@
   <div id="wrap">
 
     <!-- Fixed navbar -->
-    <div class="navbar navbar-default navbar-fixed-top">
+    <div class="navbar navbar-default navbar-fixed-top" id="navbar">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -84,29 +84,29 @@
                         <input class="form-control"
                         type="search"
                         name="artist_id"
-                        placeholder="Search show by artist id"
+                        placeholder="Artist id"
                         aria-label="Search">
                       </li>
                   </form>
-                  <!-- <form class="search" method="post" action="/shows/search">
+                  <form class="search" method="post" action="/shows/search">
                       <li>
                           <input class="form-control"
                               type="search"
                               name="venue_id"
-                              placeholder="venue id"
+                              placeholder="Artist name"
                               aria-label="Search">
                       </li>
-                  </form> -->
-                  <!-- <form class="search" id="shows-search" method="post" action="/shows/search">
+                  </form>
+                  <form class="search" id="shows-search" method="post" action="/shows/search">
                        <li>
                            <input type="search"
                            name="search_term"
                            class = "form-control"
                            aria-label="Search"
-                           placeholder="Search shows by artist id and venue id">
+                           placeholder="Venue id">
                        </li>
 
-                  </form> -->
+                  </form>
                   {% endif %}
               </div>
             </li>

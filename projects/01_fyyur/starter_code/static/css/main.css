@@ -238,8 +238,16 @@ li {
     padding: 10px;
 }
 
-li #shows-search {
+li .shows-search {
     display: flex;
     flex-flow: row;
-    /* list-style-type: none; */
+    max-width: 350px;
+}
+
+li .shows-search *{
+    padding: 0px;
+}
+
+#show-nav {
+    display: inline;
 }
