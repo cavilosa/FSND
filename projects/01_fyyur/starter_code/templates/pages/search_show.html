@@ -2,11 +2,13 @@
 {% block title %}Show Search{% endblock %}
 {% block content %}
 
+
     <div class="page-header">
         <h1>Fyyur Search!</h1>
     </div>
+     {% if results %}
     <p class="lead"> Results for  artist id {{ search_term }}: </p>
-
+    {% endif %}
     {%for show in results %}
     <ul class="nav nav-pills">
         <li class="active">
@@ -22,6 +24,7 @@
                 </div>
         </li>
     </ul>
+
     {% endfor %}
     <div class="title title-show">
         {% if messages %}
@@ -35,7 +38,45 @@
             {{ error.error }}
         {% endfor %}
     </div>
-</div>
+
+
+
+    {% if venue_results %}
+        <p class="lead"> Results for  venue id {{ search_term }}: </p>
+    {% endif %}
+        {% for show in venue_results %}
+        <ul class="nav nav-pills">
+            <li class="active">
+                <div class="col-sm-6">
+                    <div class="tile tile-show">
+                        {% if show.artist_image_link %}
+                            <img src="{{ show.artist_image_link }}" alt="Artist Image" />
+                        {% endif %}
+                        <h4>{{ show.start_time|datetime('full') }}</h4>
+                        <h5><a href="/artists/{{ show.artist_id }}">{{ show.artist_name }}</a></h5>
+                        <p>playing at</p>
+                        <h5><a href="/venues/{{ show.venue_id }}">{{ show.venue_name }}</a></h5>
+                    </div>
+            </li>
+        </ul>
+
+        {% endfor %}
+
+        <div class="title title-show">
+            {% if venue_messages %}
+            {% for message in venue_messages %}
+                Venue with id <a href="/venues/{{ message.venue_id }}">{{ message.venue_id }}</a> playes {{ message.venue_genres }} music and has no shows.
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="title title-show">
+            {% for error in venue_errors %}
+                {{ error.error }}
+            {% endfor %}
+        </div>
+
+
+
 
 
 

@@ -79,7 +79,7 @@
                   {% if (request.endpoint == 'shows') or
                     (request.endpoint == 'search_shows') or
                     (request.endpoint == 'show_shows') %}
-                  <form class="search" method="post" action="/shows/search">
+                  <form class="search" method="post" action="/shows">
                       <li>
                         <input class="form-control"
                         type="search"
@@ -88,19 +88,10 @@
                         aria-label="Search">
                       </li>
                   </form>
-                  <form class="search" method="post" action="/shows/search">
-                      <li>
-                          <input class="form-control"
-                              type="search"
-                              name="venue_id"
-                              placeholder="Artist name"
-                              aria-label="Search">
-                      </li>
-                  </form>
-                  <form class="search" id="shows-search" method="post" action="/shows/search">
+                  <form class="search" id="shows-search" method="post" action="/shows">
                        <li>
                            <input type="search"
-                           name="search_term"
+                           name="venue_id"
                            class = "form-control"
                            aria-label="Search"
                            placeholder="Venue id">
