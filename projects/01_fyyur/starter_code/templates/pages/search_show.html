@@ -1,0 +1,45 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Show Search{% endblock %}
+{% block content %}
+
+    <div class="page-header">
+        <h1>Fyyur Search!</h1>
+    </div>
+    <p class="lead"> Results for  artist id {{ search_term }}: </p>
+
+    {%for show in results %}
+    <ul class="nav nav-pills">
+        <li class="active">
+            <div class="col-sm-6">
+                <div class="tile tile-show">
+                    {% if show.artist_image_link %}
+                        <img src="{{ show.artist_image_link }}" alt="Artist Image" />
+                    {% endif %}
+                    <h4>{{ show.start_time|datetime('full') }}</h4>
+                    <h5><a href="/artists/{{ show.artist_id }}">{{ show.artist_name }}</a></h5>
+                    <p>playing at</p>
+                    <h5><a href="/venues/{{ show.venue_id }}">{{ show.venue_name }}</a></h5>
+                </div>
+        </li>
+    </ul>
+    {% endfor %}
+    <div class="title title-show">
+        {% if messages %}
+        {% for message in messages %}
+            <a href="/artists/{{ message.artist_id }}"> {{ message.artist_name }}</a> playes {{ message.artist_genres }} music and has no shows.
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div class="title title-show">
+        {% for error in errors %}
+            {{ error.error }}
+        {% endfor %}
+    </div>
+</div>
+
+
+
+{#    Todo implement show search frontend #}
+
+
+{% endblock %}

@@ -237,3 +237,9 @@ h2.monospace {
 li {
     padding: 10px;
 }
+
+li #shows-search {
+    display: flex;
+    flex-flow: row;
+    /* list-style-type: none; */
+}

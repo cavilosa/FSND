@@ -557,6 +557,70 @@ def shows():
 
     return render_template('pages/shows.html', shows=data)
 
+# @app.route('/artists/search', methods=['POST'])
+# def search_artists():
+#   # TODO: implement search on artists with partial string search. Ensure it is case-insensitive.
+#   # seach for "A" should return "Guns N Petals", "Matt Quevado", and "The Wild Sax Band".
+#   # search for "band" should return "The Wild Sax Band".
+#
+#     search_term = request.form.get("search_term", '')
+#     search = "%{}%".format(search_term)
+#     artists = Artist.query.filter(Artist.name.ilike(search)).all()
+#     print("ARTISTS lent", len(artists))
+#     data = []
+#     for artist in artists:
+#         data.append({
+#             "id": artist.id,
+#             "name": artist.name,
+#             "num_upcoming_shows": len(artist.shows)
+#         })
+#
+#     response = {
+#         "count": len(artists),
+#         "data": data
+#     }
+#     return render_template('pages/search_artists.html', results=response, search_term=request.form.get('search_term', ''))
+
+@app.route("/shows/search", methods=["POST"])
+def search_shows():
+    # search_term = request.form.get("search_term", "")
+    # search = "%{}%".format(search_term)
+    # show = Show.query.filter(Show.)
+    artist_id = request.form.get("artist_id", "")
+    #search = "%{}%".format(artist_id)
+    shows = Show.query.filter(Show.artist_id == artist_id).all()
+    artist = Artist.query.get(artist_id)
+    results = []
+    messages = []
+    errors = []
+    if not artist:
+        errors.append({
+            "error": "Sorry... There is no artist with this id."
+        })
+        print("ERRORS", errors)
+    else:
+        if not shows:
+            genres = artist.genres.replace("{", "").replace("}", "")
+            messages.append({
+                "artist_id": artist.id,
+                "artist_name": artist.name,
+                "artist_genres": genres
+            })
+            print("ARTIST", messages)
+        else:
+            for show in shows:
+                venue = Venue.query.get(show.venue_id)
+                results.append({
+                    "artist_image_link": artist.image_link,
+                    "start_time": str(show.start_time),
+                    "artist_name": artist.name,
+                    "venue_name": venue.name
+                })
+    # venue_id = request.form.get("venue_id", "")
+    #print("SEARCH", results)
+    return render_template("pages/search_show.html", results = results, search_term = request.form.get("artist_id", ""), errors = errors,  messages = messages )
+
+
 
 @app.route('/shows/create')
 def create_shows():

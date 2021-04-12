@@ -50,7 +50,7 @@
           </button>
           <a class="navbar-brand" href="/">🔥</a>
         </div>
-        <div class="collapse navbar-collapse">
+        <div class="collapse navbar-collapse" id="show-nav">
           <ul class="nav navbar-nav">
             <li>
               {% if (request.endpoint == 'venues') or
@@ -75,17 +75,40 @@
                   aria-label="Search">
               </form>
               {% endif %}
-              {% if (request.endpoint == 'shows') or
-                (request.endpoint == 'search_shows') or
-                (request.endpoint == 'show_shows') %}
-              <form class="search" method="post" action="/shows/search">
-                <input class="form-control"
-                  type="search"
-                  name="search_term"
-                  placeholder="Find a show"
-                  aria-label="Search">
-              </form>
-              {% endif %}
+              <div class="shows-search">
+                  {% if (request.endpoint == 'shows') or
+                    (request.endpoint == 'search_shows') or
+                    (request.endpoint == 'show_shows') %}
+                  <form class="search" method="post" action="/shows/search">
+                      <li>
+                        <input class="form-control"
+                        type="search"
+                        name="artist_id"
+                        placeholder="Search show by artist id"
+                        aria-label="Search">
+                      </li>
+                  </form>
+                  <!-- <form class="search" method="post" action="/shows/search">
+                      <li>
+                          <input class="form-control"
+                              type="search"
+                              name="venue_id"
+                              placeholder="venue id"
+                              aria-label="Search">
+                      </li>
+                  </form> -->
+                  <!-- <form class="search" id="shows-search" method="post" action="/shows/search">
+                       <li>
+                           <input type="search"
+                           name="search_term"
+                           class = "form-control"
+                           aria-label="Search"
+                           placeholder="Search shows by artist id and venue id">
+                       </li>
+
+                  </form> -->
+                  {% endif %}
+              </div>
             </li>
           </ul>
           <ul class="nav navbar-nav">
@@ -93,7 +116,11 @@
             <li {% if request.endpoint == 'artists' %} class="active" {% endif %}><a href="{{ url_for('artists') }}">Artists</a></li>
             <li {% if request.endpoint == 'shows' %} class="active" {% endif %}><a href="{{ url_for('shows') }}">Shows</a></li>
           </ul>
+
+
         </div><!--/.nav-collapse -->
+
+
       </div>
     </div>
 
