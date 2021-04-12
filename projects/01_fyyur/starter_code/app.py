@@ -553,6 +553,7 @@ def shows():
             "artist_image_link": artist.image_link,
             "start_time": str(show.start_time)
         })
+        print("SHOWS", data)
 
     return render_template('pages/shows.html', shows=data)
 
