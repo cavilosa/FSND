@@ -97,9 +97,12 @@ app.jinja_env.filters['datetime'] = format_datetime
 
 @app.route('/')
 def index():
-    artists = Artist.query.order_by(Artist.date_added).limit(10)
+    # query artists and venues by id as it reflects the last added to the db,
+    # could be done by date_added, but then edit date would be the main
 
-    venues = Venue.query.order_by(Venue.date_added).limit(10)
+    artists = Artist.query.order_by(Artist.id.desc()).limit(10)
+
+    venues = Venue.query.order_by(Venue.id.desc()).limit(10)
     # print("VEBUES", venues[0].id)
 
     artists_data = []

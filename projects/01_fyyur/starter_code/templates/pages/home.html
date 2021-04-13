@@ -31,9 +31,9 @@
 			{% for artist in artists %}
 				<li>
 					{% if artist.image_link %}
-					    <div class="image-link">
-					    	<img src="{{ artist.image_link }} "/>
-					    </div>
+					<div class="image-link">
+					    <img src="{{ artist.image_link }} "/>
+				    </div>
 					{% endif %}
 					ARTIST:<a href="/artists/{{ artist.id }}">{{ artist.name }}</a>  <br>
 					GENRES:{{ artist.genres }}<br>
