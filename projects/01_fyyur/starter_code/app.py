@@ -392,6 +392,8 @@ def show_artist(artist_id):
         "state": artist.state,
         "phone": artist.phone,
         "seeking_venue": artist.seeking_venue,
+        "website": artist.website_link,
+        "facebook_link": artist.facebook_link,
         "image_link": artist.image_link,
         "past_shows": past_shows,
         "seeking_description": artist.seeking_description,
@@ -420,6 +422,7 @@ def edit_artist_submission(artist_id):
     if form.validate():
         try:
             artist = Artist.query.get(artist_id)
+            # form = ArtistForm(obj=artist)
             form.populate_obj(artist)
             db.session.commit()
             flash('Artist ' + request.form['name'] + ' was successfully edited!')
@@ -591,6 +594,8 @@ def search_shows():
                 for show in shows:
                     venue = Venue.query.get(show.venue_id)
                     results.append({
+                        "artist_id": artist.id,
+                        "venue_id": venue.id,
                         "artist_image_link": artist.image_link,
                         "start_time": str(show.start_time),
                         "artist_name": artist.name,
@@ -619,6 +624,8 @@ def search_shows():
                 for show in shows:
                     artist = Artist.query.get(show.artist_id)
                     venue_results.append({
+                        "artist_id": artist.id,
+                        "venue_id": venue.id,
                         "artist_image_link": artist.image_link,
                         "start_time": str(show.start_time),
                         "artist_name": artist.name,

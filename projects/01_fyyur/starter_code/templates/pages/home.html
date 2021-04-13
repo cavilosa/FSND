@@ -30,11 +30,14 @@
 		<ul class="recent-list">
 			{% for artist in artists %}
 				<li>
-					{% if artist.image_link %}{{ artist.image_link}}<br>{% endif %}
+					{% if artist.image_link %}
+					    <div class="image-link">
+					    	<img src="{{ artist.image_link }} "/>
+					    </div>
+					{% endif %}
 					ARTIST:<a href="/artists/{{ artist.id }}">{{ artist.name }}</a>  <br>
-					<!-- ID: {{ artist.id }}<br> -->
 					GENRES:{{ artist.genres }}<br>
-					{% if artist.website_link %}{{ artist.website_link}}<br>{% endif %}
+					{% if artist.website_link %} <a href="{{ artist.website_link}}"> {{ artist.website_link}}</a><br>{% endif %}
 					{% if artist.shows %} SHOWS:
 					<ul>
 						{% for show in artist.shows %}
@@ -60,10 +63,15 @@
 		<ul class="recent-list">
 			{% for venue in venues %}
 			    <li>
-					{% if venue.image_link %}{{ venue.image_link}}<br>{% endif %}
+					{% if venue.image_link %}
+					<div class="image-link">
+						<img src="{{ venue.image_link }} "/>
+					</div>
+				    {% endif %}
 					VENUE NAME:<a href="/venues/{{ venue.id }}"> {{ venue.name }}</a><br>
 					CITY: {{ venue.city }}, STATE: {{ venue.state }} <br>
-					{% if venue.website_link %}{{ venue.website_link}}<br>{% endif %}
+					{% if venue.website_link %}
+					    <a href="{{ venue.website_link}}"> {{ venue.website_link}}</a><br>{% endif %}
 
 				</li>
 
