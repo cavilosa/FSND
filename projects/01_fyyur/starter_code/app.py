@@ -283,7 +283,7 @@ def create_venue_submission():
             message.append(field + " " + "|".join(err))
         flash("Errors" +  str(message))
 
-    return render_template('pages/home.html')
+    return redirect(url_for("index"))
 
 
 @app.route('/venues/<venue_id>', methods=['DELETE'])
@@ -537,7 +537,7 @@ def create_artist_submission():
             message.append(field + " " + "|".join(err))
         flash("Errors" +  str(message))
 
-    return render_template('pages/home.html')
+    return redirect(url_for("index"))
 
 #  Shows
 #  ----------------------------------------------------------------

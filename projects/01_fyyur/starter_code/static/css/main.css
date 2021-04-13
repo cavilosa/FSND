@@ -213,16 +213,13 @@ h2.monospace {
 .recently-added {
     display: flex;
     flex-flow: row;
-    justify-content: space-between;
-    margin: 20px;
+    justify-content: space-around;
 }
 
 .recently-added-artists,
 .recently-added-venues {
     display: flex;
     flex-flow: column;
-    padding: 10px;
-
 }
 
 .recent {
@@ -254,4 +251,12 @@ li .shows-search *{
 
 .image-link {
     max-width: 15vw;
+}
+
+.front-page {
+    border-radius: 20px;
+    background-color: #f2f0df;
+    margin: 10px;
+    padding: 10px;
+    max-width: 50vw;
 }

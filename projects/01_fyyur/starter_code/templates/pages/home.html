@@ -29,10 +29,10 @@
 		<h3 class="recent">Recently added artists</h3>
 		<ul class="recent-list">
 			{% for artist in artists %}
-				<li>
+				<li class="front-page">
 					{% if artist.image_link %}
 					<div class="image-link">
-					    <img src="{{ artist.image_link }} "/>
+					   <img src="{{ artist.image_link }} "/>
 				    </div>
 					{% endif %}
 					ARTIST:<a href="/artists/{{ artist.id }}">{{ artist.name }}</a>  <br>
@@ -62,7 +62,7 @@
         <h3 class="recent">Recently added venues</h3>
 		<ul class="recent-list">
 			{% for venue in venues %}
-			    <li>
+			    <li class="front-page">
 					{% if venue.image_link %}
 					<div class="image-link">
 						<img src="{{ venue.image_link }} "/>
