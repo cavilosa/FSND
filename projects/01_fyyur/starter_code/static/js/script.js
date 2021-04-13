@@ -7,7 +7,6 @@ const deleteVenue = document.querySelector("#delete-venue");
 if (deleteVenue != null) {
     deleteVenue.addEventListener("click", (e) => {
         e.preventDefault();
-        console.log("deleteVenue", e)
         const deleteId = e.target.dataset["id"];
         fetch ("/venues/" + deleteId, {
             method:"DELETE"
@@ -22,7 +21,6 @@ const deleteArtist = document.querySelector("#delete-artist");
 if (deleteArtist != null) {
     deleteArtist.addEventListener("click", (e) => {
         e.preventDefault();
-        console.log("deleteArtist", e)
         const deleteId = e.target.dataset["id"];
         fetch ("/artist/" + deleteId, {
             method:"DELETE"

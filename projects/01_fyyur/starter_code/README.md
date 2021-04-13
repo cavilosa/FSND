@@ -4,11 +4,11 @@ Fyyur
 ## My modifications:
   * implemented all todos in the project,
   * replaced mockup data with database data,
-  * added delete buttons to artist and venue pages,
+  * added delete buttons to artist and venue pages with event listeners in js file,
   * added recentle adde artists and venues to the main page,
   * implemented search shows by artist id an venue id on the shows page
   * added lacking HYML and CSS
-  
+
 
 
 ## Introduction
