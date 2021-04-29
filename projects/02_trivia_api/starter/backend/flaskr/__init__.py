@@ -14,8 +14,8 @@ def paginate_questions(request, selection):
     start = (page - 1) * QUESTIONS_PER_PAGE
     end = start + QUESTIONS_PER_PAGE
 
-    questions = [question.format() for question in selection]
-    current_questions = questions[start:end]
+
+    current_questions = selection[start:end]
 
     return current_questions
 
@@ -54,12 +54,10 @@ def create_app(test_config=None):
     @app.route("/categories")
     def retrieve_categories():
         categories = [category.format() for category in Category.query.order_by(Category.id).all()]
-        # print(categories[0].get("id"))
         dict = {}
         for category in categories:
             dict.update({category.get("id"):category.get("type")})
-        # print(dict)
-        print("CATEGORIES")
+
         return jsonify({
             "success":True,
             "categories": dict
@@ -75,18 +73,21 @@ def create_app(test_config=None):
 
     @app.route("/questions")
     def retrieve_queastions():
-        questions = [question.format() for question in Question.query.all()]
+        questions = [question.format() for question in Question.query.order_by(Question.id).all()]
+        current_questions = paginate_questions(request, questions)
+
+        if len(current_questions) == 0:
+            abort(404)
+
         categories = [category.format() for category in Category.query.order_by(Category.id).all()]
-        # print(categories[0].get("id"))
         dict = {}
         for category in categories:
             dict.update({category.get("id"):category.get("type")})
-        # print(dict)
-        print ("QUESTIONS")
+
         return jsonify({
-            "questions": questions,
+            "questions": current_questions,
             "totalQuestions": len(questions),
-            "categories": dict
+            "categories": categories
         })
 
 
@@ -153,5 +154,13 @@ def create_app(test_config=None):
   # Create error handlers for all expected errors
   # including 404 and 422.
   # '''
+
+    # @app.errorhandler(404)
+    # def not_fount(error):
+    #     return jsonify({
+    #         "success": False,
+    #         "error": 404,
+    #         "messages": "resource not found"
+    #     }), 404
 
     return app
