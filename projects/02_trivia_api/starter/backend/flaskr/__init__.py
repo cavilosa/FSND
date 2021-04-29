@@ -25,6 +25,7 @@ def create_app(test_config=None):
     print("Hello, world!")
     app = Flask(__name__)
     setup_db(app)
+    CORS(app)
 
   # '''
   # @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
@@ -50,8 +51,19 @@ def create_app(test_config=None):
   # for all available categories.
   # '''
 
-    @app.route("/questions")
-    def retrieve_questions():
+    @app.route("/categories")
+    def retrieve_categories():
+        categories = [category.format() for category in Category.query.order_by(Category.id).all()]
+        # print(categories[0].get("id"))
+        dict = {}
+        for category in categories:
+            dict.update({category.get("id"):category.get("type")})
+        # print(dict)
+        print("CATEGORIES")
+        return jsonify({
+            "success":True,
+            "categories": dict
+        })
 
   #
   # '''
@@ -60,7 +72,24 @@ def create_app(test_config=None):
   # including pagination (every 10 questions).
   # This endpoint should return a list of questions,
   # number of total questions, current category, categories.
-  #
+
+    @app.route("/questions")
+    def retrieve_queastions():
+        questions = [question.format() for question in Question.query.all()]
+        categories = [category.format() for category in Category.query.order_by(Category.id).all()]
+        # print(categories[0].get("id"))
+        dict = {}
+        for category in categories:
+            dict.update({category.get("id"):category.get("type")})
+        # print(dict)
+        print ("QUESTIONS")
+        return jsonify({
+            "questions": questions,
+            "totalQuestions": len(questions),
+            "categories": dict
+        })
+
+
   # TEST: At this point, when you start the application
   # you should see questions and categories generated,
   # ten questions per page and pagination at the bottom of the screen for three pages.
