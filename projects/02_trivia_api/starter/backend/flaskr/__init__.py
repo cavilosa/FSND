@@ -11,6 +11,7 @@ QUESTIONS_PER_PAGE = 10
 
 def paginate_questions(request, selection):
     page = request.args.get("page", 1, type=int)
+    print("PAGE", page)
     start = (page - 1) * QUESTIONS_PER_PAGE
     end = start + QUESTIONS_PER_PAGE
 
@@ -18,6 +19,17 @@ def paginate_questions(request, selection):
     current_questions = selection[start:end]
 
     return current_questions
+
+def retrieve_categories():
+    categories = [category.format() for category in Category.query.order_by(Category.id).all()]
+    dict = {}
+    for category in categories:
+        dict.update({category.get("id"):category.get("type")})
+
+    return jsonify({
+        "success":True,
+        "categories": dict
+    })
 
 
 def create_app(test_config=None):
@@ -51,7 +63,7 @@ def create_app(test_config=None):
   # for all available categories.
   # '''
 
-    @app.route("/categories")
+    @app.route("/play")
     def retrieve_categories():
         categories = [category.format() for category in Category.query.order_by(Category.id).all()]
         dict = {}
@@ -71,10 +83,11 @@ def create_app(test_config=None):
   # This endpoint should return a list of questions,
   # number of total questions, current category, categories.
 
-    @app.route("/questions")
-    def retrieve_queastions():
+    @app.route("/questions/")
+    def retrieve_questions():
         questions = [question.format() for question in Question.query.order_by(Question.id).all()]
         current_questions = paginate_questions(request, questions)
+        print("CUR", current_questions[0])
 
         if len(current_questions) == 0:
             abort(404)
@@ -87,7 +100,8 @@ def create_app(test_config=None):
         return jsonify({
             "questions": current_questions,
             "totalQuestions": len(questions),
-            "categories": categories
+            "categories": dict,
+            "current_category": None
         })
 
 
