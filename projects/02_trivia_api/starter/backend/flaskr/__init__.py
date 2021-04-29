@@ -11,7 +11,7 @@ QUESTIONS_PER_PAGE = 10
 
 def paginate_questions(request, selection):
     page = request.args.get("page", 1, type=int)
-    print("PAGE", page)
+    print("PAGE paginate", page)
     start = (page - 1) * QUESTIONS_PER_PAGE
     end = start + QUESTIONS_PER_PAGE
 
@@ -63,9 +63,13 @@ def create_app(test_config=None):
   # for all available categories.
   # '''
 
-    @app.route("/play")
+    @app.route("/categories")
     def retrieve_categories():
         categories = [category.format() for category in Category.query.order_by(Category.id).all()]
+
+        if len(categories) == 0:
+            abort(404)
+
         dict = {}
         for category in categories:
             dict.update({category.get("id"):category.get("type")})
@@ -86,8 +90,10 @@ def create_app(test_config=None):
     @app.route("/questions/")
     def retrieve_questions():
         questions = [question.format() for question in Question.query.order_by(Question.id).all()]
+        page = request.args.get("page")
+        print("PAGE questions", page)
         current_questions = paginate_questions(request, questions)
-        print("CUR", current_questions[0])
+
 
         if len(current_questions) == 0:
             abort(404)
@@ -104,7 +110,6 @@ def create_app(test_config=None):
             "current_category": None
         })
 
-
   # TEST: At this point, when you start the application
   # you should see questions and categories generated,
   # ten questions per page and pagination at the bottom of the screen for three pages.
@@ -118,6 +123,10 @@ def create_app(test_config=None):
   # TEST: When you click the trash icon next to a question, the question will be removed.
   # This removal will persist in the database and when you refresh the page.
   # '''
+
+
+
+
   #
   # '''
   # @TODO:
@@ -169,12 +178,12 @@ def create_app(test_config=None):
   # including 404 and 422.
   # '''
 
-    # @app.errorhandler(404)
-    # def not_fount(error):
-    #     return jsonify({
-    #         "success": False,
-    #         "error": 404,
-    #         "messages": "resource not found"
-    #     }), 404
+    @app.errorhandler(404)
+    def not_found(error):
+        return jsonify({
+            "success": False,
+            "error": 404,
+            "messages": "resource not found"
+        }), 404
 
     return app

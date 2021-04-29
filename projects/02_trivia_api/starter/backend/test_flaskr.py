@@ -25,6 +25,50 @@ class TriviaTestCase(unittest.TestCase):
             # create all tables
             self.db.create_all()
 
+    def test_retrieve_categories(self):
+        pass
+        """Getting all categories"""
+        res = self.client().get("/categories")
+        data = json.loads(res.data)
+        categories = Category.query.all()
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data["success"])
+        self.assertTrue(len(data["categories"]))
+
+    def test_404_categories(self):
+        """404 getting questions"""
+        res = self.client().get("/categories/?page=3")
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertFalse(data["success"])
+        self.assertEqual(data["messages"], "resource not found")
+        self.assertEqual(data["error"], 404)
+
+
+    def test_retrieving_questions(self):
+        """TESTING GETTING QUESTIONS"""
+        res = self.client().get("/questions/")
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data["questions"])
+        self.assertTrue(data["totalQuestions"])
+        self.assertTrue(data["categories"])
+        self.assertIsNone(data["current_category"])
+
+    def test_404_retrieve_questions(self):
+        """404 getting questions"""
+        res = self.client().get("/questions/?page=1000")
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertFalse(data["success"])
+        self.assertEqual(data["messages"], "resource not found")
+        self.assertEqual(data["error"], 404)
+
+
     def tearDown(self):
         """Executed after reach test"""
         pass
@@ -33,6 +77,9 @@ class TriviaTestCase(unittest.TestCase):
     TODO
     Write at least one test for each test for successful operation and for expected errors.
     """
+
+
+
 
 
 # Make the tests conveniently executable
