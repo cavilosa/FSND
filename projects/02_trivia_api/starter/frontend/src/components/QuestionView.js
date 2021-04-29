@@ -23,9 +23,10 @@ class QuestionView extends Component {
 
   getQuestions = () => {
     $.ajax({
-      url: `http://localhost:5000/questions?page=${this.state.page}`, //TODO: update request URL
+      url: `http://localhost:5000/questions/?page=${this.state.page}`, //TODO: update request URL
       type: "GET",
       success: (result) => {
+        alert(this.state.page)
         this.setState({
           questions: result.questions,
           totalQuestions: result.total_questions,
@@ -41,7 +42,7 @@ class QuestionView extends Component {
   }
 
   selectPage(num) {
-    this.setState({page: num}, () => this.getQuestions());
+    this.setState({page: num}, () =>  this.getQuestions());
   }
 
   createPagination(){

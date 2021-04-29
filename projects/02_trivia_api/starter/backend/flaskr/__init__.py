@@ -105,7 +105,7 @@ def create_app(test_config=None):
 
         return jsonify({
             "questions": current_questions,
-            "totalQuestions": len(questions),
+            "total_questions": len(questions),
             "categories": dict,
             "current_category": None
         })

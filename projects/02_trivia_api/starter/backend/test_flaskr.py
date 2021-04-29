@@ -36,6 +36,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data["success"])
         self.assertTrue(len(data["categories"]))
 
+
     def test_404_categories(self):
         """404 getting questions"""
         res = self.client().get("/categories/?page=3")
@@ -54,9 +55,21 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data["questions"])
+        self.assertTrue(data["total_questions"])
+        self.assertTrue(data["categories"])
+        self.assertIsNone(data["current_category"])
+
+    def test_retrieving_questions(self):
+        """TESTING GETTING QUESTIONS page 2"""
+        res = self.client().get("/questions/?page=3")
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data["questions"])
         self.assertTrue(data["totalQuestions"])
         self.assertTrue(data["categories"])
         self.assertIsNone(data["current_category"])
+
 
     def test_404_retrieve_questions(self):
         """404 getting questions"""
