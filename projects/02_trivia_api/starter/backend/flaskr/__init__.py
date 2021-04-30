@@ -87,7 +87,7 @@ def create_app(test_config=None):
   # This endpoint should return a list of questions,
   # number of total questions, current category, categories.
 
-    @app.route("/questions/", methods=["GET", "DELETE"])
+    @app.route("/questions/", methods=["GET", "DELETE", "POST"])
     def retrieve_questions():
         questions = [question.format() for question in Question.query.order_by(Question.id).all()]
         page = request.args.get("page")
@@ -144,7 +144,12 @@ def create_app(test_config=None):
   # Create an endpoint to POST a new question,
   # which will require the question and answer text,
   # category, and difficulty score.
-  #
+
+   # @app.route("/questions", methods=["POST"])
+   # def post_new_question():
+
+
+
   # TEST: When you submit a question on the "Add" tab,
   # the form will clear and the question will appear at the end of the last page
   # of the questions list in the "List" tab.

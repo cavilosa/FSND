@@ -107,6 +107,13 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["error"], 404)
 
 
+    # TEST: When you submit a question on the "Add" tab,
+    # the form will clear and the question will appear at the end of the last page
+    # of the questions list in the "List" tab.
+
+    
+
+
 
 
     def tearDown(self):
