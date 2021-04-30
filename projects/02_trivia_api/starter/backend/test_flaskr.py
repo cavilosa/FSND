@@ -82,26 +82,37 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["error"], 404)
 
 
-    def test_delete_question(self):
-        """DELETING A QUESTION BY ID"""
-        res = self.client().delete("/questions/5")
-        data = json.loads(res.data)
-        question = Question.query.get(5)
+    # def test_delete_question(self):
+    #     """DELETING A QUESTION BY ID"""
+    #     res = self.client().delete("/questions/6")
+    #     # print("STATUS", res.status_code)
+    #     questions = Question.query.all()
+    #     # print(questions)
+    #     question = Question.query.get(6)
+    #
+    #     self.assertEqual(res.status_code, 302) # performing URL redirection.
+    #     self.assertIsNone(question)
 
-        self.assertEqual(res.status_code, 200)
+
+    def test_404_question(self):
+        """DELETING NOT FOUND QUESTION"""
+        res = self.client().delete("/questions/6")
+        data = json.loads(res.data)
+        question = Question.query.get(6)
+
+        self.assertEqual(res.status_code, 404) # performing URL redirection.
         self.assertIsNone(question)
-        self.assertTrue(data["questions"])
-        self.assertTrue(data["total_questions"])
-        self.assertTrue(data["categories"])
-        self.assertIsNone(data["current_category"])
+        self.assertFalse(data["success"])
+        self.assertEqual(data["messages"], "resource not found")
+        self.assertEqual(data["error"], 404)
+
 
 
 
     def tearDown(self):
         """Executed after each test"""
-        psql -d trivia_test -U postgres -a -f trivia.psql
-
-
+        # psql -d trivia_test -U postgres -a -f trivia.psql
+        pass
 
 
 
