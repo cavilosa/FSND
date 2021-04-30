@@ -87,11 +87,12 @@ def create_app(test_config=None):
   # This endpoint should return a list of questions,
   # number of total questions, current category, categories.
 
-    @app.route("/questions/")
+    @app.route("/questions/", methods=["GET", "DELETE"])
     def retrieve_questions():
         questions = [question.format() for question in Question.query.order_by(Question.id).all()]
         page = request.args.get("page")
-        print("PAGE questions", page)
+        # print("PAGE questions", page)
+        print("retrieve questions")
         current_questions = paginate_questions(request, questions)
 
 
@@ -124,7 +125,17 @@ def create_app(test_config=None):
   # This removal will persist in the database and when you refresh the page.
   # '''
 
+    @app.route("/questions/<id>", methods=["DELETE"])
+    def delete_question(id):
+        question = Question.query.get(id)
+        print("QUESTION", question)
 
+        if question is None:
+            abort(404)
+
+        question.delete()
+
+        return redirect(url_for("retrieve_questions"))
 
 
   #

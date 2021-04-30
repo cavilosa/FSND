@@ -61,12 +61,12 @@ class TriviaTestCase(unittest.TestCase):
 
     def test_retrieving_questions(self):
         """TESTING GETTING QUESTIONS page 2"""
-        res = self.client().get("/questions/?page=3")
+        res = self.client().get("/questions/?page=2")
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data["questions"])
-        self.assertTrue(data["totalQuestions"])
+        self.assertTrue(data["total_questions"])
         self.assertTrue(data["categories"])
         self.assertIsNone(data["current_category"])
 
@@ -82,14 +82,25 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["error"], 404)
 
 
-    def tearDown(self):
-        """Executed after reach test"""
-        pass
+    def test_delete_question(self):
+        """DELETING A QUESTION BY ID"""
+        res = self.client().delete("/questions/5")
+        data = json.loads(res.data)
+        question = Question.query.get(5)
 
-    """
-    TODO
-    Write at least one test for each test for successful operation and for expected errors.
-    """
+        self.assertEqual(res.status_code, 200)
+        self.assertIsNone(question)
+        self.assertTrue(data["questions"])
+        self.assertTrue(data["total_questions"])
+        self.assertTrue(data["categories"])
+        self.assertIsNone(data["current_category"])
+
+
+
+    def tearDown(self):
+        """Executed after each test"""
+        psql -d trivia_test -U postgres -a -f trivia.psql
+
 
 
 

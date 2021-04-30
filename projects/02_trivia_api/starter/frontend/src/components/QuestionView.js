@@ -26,13 +26,14 @@ class QuestionView extends Component {
       url: `http://localhost:5000/questions/?page=${this.state.page}`, //TODO: update request URL
       type: "GET",
       success: (result) => {
-        alert(this.state.page)
+        // alert(this.state.page)
         this.setState({
           questions: result.questions,
           totalQuestions: result.total_questions,
           categories: result.categories,
-          currentCategory: result.current_category })
+          currentCategory: result.current_category})
         return;
+
       },
       error: (error) => {
         alert('Unable to load questions. Please try your request again')
@@ -109,6 +110,7 @@ class QuestionView extends Component {
           url: `/questions/${id}`, //TODO: update request URL
           type: "DELETE",
           success: (result) => {
+            console.log(result)
             this.getQuestions();
           },
           error: (error) => {
