@@ -55,6 +55,8 @@ class FormView extends Component {
       },
       error: (error) => {
         alert('Unable to add question. Please try your request again')
+        console.log(error, "ERROR")
+
         return;
       }
     })
