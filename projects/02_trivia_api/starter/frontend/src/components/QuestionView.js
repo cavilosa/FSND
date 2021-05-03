@@ -110,7 +110,7 @@ class QuestionView extends Component {
           url: `/questions/${id}`, //TODO: update request URL
           type: "DELETE",
           success: (result) => {
-            console.log(result)
+            // console.log(result)
             this.getQuestions();
           },
           error: (error) => {
@@ -129,6 +129,7 @@ class QuestionView extends Component {
           <h2 onClick={() => {this.getQuestions()}}>Categories</h2>
           <ul>
             {Object.keys(this.state.categories).map((id, ) => (
+                 console.log("id", `${this.state.categories[id]}`),
               <li key={id} onClick={() => {this.getByCategory(id)}}>
                 {this.state.categories[id]}
                 <img className="category" src={`${this.state.categories[id].toLowerCase()}.svg`}/>
