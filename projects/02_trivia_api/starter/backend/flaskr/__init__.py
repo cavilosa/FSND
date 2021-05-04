@@ -182,8 +182,6 @@ def create_app(test_config=None):
 
 
 
-<<<<<<< HEAD
-=======
     @app.route("/questions", methods=["POST"])
     def post_new_question():
         body = request.get_json()
@@ -205,7 +203,6 @@ def create_app(test_config=None):
             "difficulty": difficulty,
             "category": category
         })
->>>>>>> master
 
 
 
