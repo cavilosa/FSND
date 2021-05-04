@@ -135,7 +135,10 @@ def create_app(test_config=None):
 
         question.delete()
 
-        return redirect(url_for("retrieve_questions"))
+        # return redirect(url_for("retrieve_questions"))
+        return jsonify({
+            "success":True
+        })
 
 
   #
