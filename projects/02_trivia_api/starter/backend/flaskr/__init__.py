@@ -193,7 +193,46 @@ def create_app(test_config=None):
   # categories in the left column will cause only questions of that
   # category to be shown.
   # '''
-  #
+   # url: `/categories/${id}/questions`, //TODO: update request URL
+   # type: "GET",
+   # success: (result) => {
+   #   this.setState({
+   #     questions: result.questions,
+   #     totalQuestions: result.total_questions,
+   #     currentCategory: result.current_category })
+   #   return;
+   # },
+
+    @app.route("/categories/<id>/questions")
+    def retrieve_questions_by_category(id):
+
+        category = Category.query.get(id)
+        # print("CATEGORY", category.format())
+
+        list = Question.query.filter(Question.category == id).all()
+        # print("LIST", len(list))
+
+        questions = []
+        for question in list:
+            question = question.format()
+            questions.append(question)
+        # print(questions)
+        # print(len(questions), category.format()["id"])
+
+        return jsonify({
+            "success": True,
+            "questions": questions,
+            "total_questions": len(questions),
+            "current_category": category.format()["id"]
+        })
+
+
+
+
+
+
+
+
   #
   # '''
   # @TODO:

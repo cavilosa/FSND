@@ -143,6 +143,10 @@ COPY public.questions (id, question, answer, difficulty, category) FROM stdin;
 21	Who discovered penicillin?	Alexander Fleming	3	1
 22	Hematology is a branch of medicine involving the study of what?	Blood	4	1
 23	Which dung beetle was worshipped by the ancient Egyptians?	Scarab	4	4
+24	Which?	Scarab	4	5
+25	Which dung ?	Scarab	4	5
+26	Which dung beetle was?	Scarab	4	6
+27	Which dung beetle was worshipped?	Scarab	4	6
 \.
 
 
@@ -187,4 +191,3 @@ ALTER TABLE ONLY public.questions
 --
 -- PostgreSQL database dump complete
 --
-

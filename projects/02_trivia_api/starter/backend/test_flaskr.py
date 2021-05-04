@@ -111,20 +111,43 @@ class TriviaTestCase(unittest.TestCase):
     # the form will clear and the question will appear at the end of the last page
     # of the questions list in the "List" tab.
 
-    def test_add_question(self):
-        """ADDING A NEW QUESTION"""
-        res = self.client().post("/questions/", json={"question": "What", "answer":"NO", "difficulty": 2, "category": "Art"})
-        # data = json.loads(res.data)
-        print("DATA", res)
+    # def test_add_question(self):
+    #     """ADDING A NEW QUESTION"""
+    #     res = self.client().post("/questions/", json={"question": "What", "answer":"NO", "difficulty": 2, "category": "Art"})
+    #     # data = json.loads(res.data)
+    #     print("DATA", res)
+    #
+    #     # question = Question.query.filter_by("question"=="What").all()
+    #
+    #     self.assertEqual(res.status_code, 200)
+    #     self.assertIsNotNone(question)
+    #     self.assertTrue(data["difficulty"])
+    #     self.assertTrue(data["question"])
+    #     self.assertTrue(data["category"])
+    #     self.assertTrue(data["answer"])
 
-        # question = Question.query.filter_by("question"=="What").all()
+
+     # url: `/categories/${id}/questions`, //TODO: update request URL
+     # type: "GET",
+     # success: (result) => {
+     #   this.setState({
+     #     questions: result.questions,
+     #     totalQuestions: result.total_questions,
+     #     currentCategory: result.current_category })
+     #   return;
+     # },
+
+    def test_questions_by_category(self):
+        """GETTING QUESTIONS FROM A CATEGORY"""
+        res = self.client().get("/categories/<id>/questions")
+        data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
-        self.assertIsNotNone(question)
-        self.assertTrue(data["difficulty"])
-        self.assertTrue(data["question"])
-        self.assertTrue(data["category"])
-        self.assertTrue(data["answer"])
+        self.assertFalse(data["difficulty"])
+        self.assertTrue(len(data["questions"]))
+        self.assertTrue(data["total_questions"])
+        self.assertTrue(data["current_category"])
+
 
 
     def tearDown(self):
