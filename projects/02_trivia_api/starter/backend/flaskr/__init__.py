@@ -156,18 +156,6 @@ def create_app(test_config=None):
 
         body = request.get_json()
 
-        if "searchTerm" in body:
-            search = "%{}%".format(body.get("searchTerm"))
-            questions = Question.query.filter(Question.question.ilike(search).all())
-            questions_list = [question.format() for question in questions]
-
-            return jsonify({
-                "success": True,
-                "questions": questions_list,
-                "total_questions": len(questions_list),
-                "current_category": None
-            })
-
         answer = body.get("answer", None)
         question = body.get("question", None)
         difficulty = body.get("difficulty", None)
@@ -202,21 +190,22 @@ def create_app(test_config=None):
   # only question that include that string within their question.
   # Try using the word "title" to start.
   # '''
-    @app.route("/questions/", methods=["POST"])
+    @app.route("/questions/search", methods=["POST"])
     def search_questions():
         body = request.get_json()
-        search = "%{}%".format(body.get("searchTerm"))
 
-        if searchTerm in body:
-            questions = Question.query.filter(Question.question.ilike(search).all())
-            questions_list = [question.format() for question in questions]
 
-        return jsonify({
-            "success": True,
-            "questions": questions_list,
-            "total_questions": len(questions_list),
-            "current_category": None
-        })
+        if "searchTerm" in body:
+            search = "%{}%".format(body.get("searchTerm"))
+            questions_list = Question.query.filter(Question.question.ilike(search).all())
+            questions = [question.format() for question in questions_list]
+
+            return jsonify({
+                "success": True,
+                "questions": questions,
+                "total_questions": len(questions),
+                "current_category": None
+            })
 
   # '''
   # @TODO:
