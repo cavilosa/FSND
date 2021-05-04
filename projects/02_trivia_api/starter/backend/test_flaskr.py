@@ -84,13 +84,11 @@ class TriviaTestCase(unittest.TestCase):
 
     # def test_delete_question(self):
     #     """DELETING A QUESTION BY ID"""
-    #     res = self.client().delete("/questions/6")
-    #     # print("STATUS", res.status_code)
+    #     res = self.client().delete("/questions/5")
     #     questions = Question.query.all()
-    #     # print(questions)
-    #     question = Question.query.get(6)
+    #     question = Question.query.get(5)
     #
-    #     self.assertEqual(res.status_code, 302) # performing URL redirection.
+    #     self.assertEqual(res.status_code, 200)
     #     self.assertIsNone(question)
 
 
@@ -127,26 +125,31 @@ class TriviaTestCase(unittest.TestCase):
     #     self.assertTrue(data["answer"])
 
 
-     # url: `/categories/${id}/questions`, //TODO: update request URL
-     # type: "GET",
-     # success: (result) => {
-     #   this.setState({
-     #     questions: result.questions,
-     #     totalQuestions: result.total_questions,
-     #     currentCategory: result.current_category })
-     #   return;
-     # },
-
     def test_questions_by_category(self):
         """GETTING QUESTIONS FROM A CATEGORY"""
-        res = self.client().get("/categories/<id>/questions")
+        res = self.client().get("/categories/3/questions")
         data = json.loads(res.data)
+        # print("DATA", data)
 
         self.assertEqual(res.status_code, 200)
-        self.assertFalse(data["difficulty"])
         self.assertTrue(len(data["questions"]))
         self.assertTrue(data["total_questions"])
         self.assertTrue(data["current_category"])
+
+    def test_404_questions_by_category(self):
+        """Error getting questions by category"""
+        res = self.client().get("/categories/7/questions")
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertFalse(data["success"])
+        self.assertEqual(data["messages"], "resource not found")
+        self.assertEqual(data["error"], 404)
+
+
+
+
+
 
 
 

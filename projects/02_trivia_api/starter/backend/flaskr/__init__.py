@@ -211,9 +211,11 @@ def create_app(test_config=None):
 
         category = Category.query.get(id)
         # print("CATEGORY", category.format())
+        if category is None:
+            abort (404)
 
         list = Question.query.filter(Question.category == id).order_by(Question.difficulty).all()
-        print("LIST", list)
+        # print("LIST", list)
 
         questions = []
         for question in list:
