@@ -111,9 +111,20 @@ class TriviaTestCase(unittest.TestCase):
     # the form will clear and the question will appear at the end of the last page
     # of the questions list in the "List" tab.
 
-    
+    def test_add_question(self):
+        """ADDING A NEW QUESTION"""
+        res = self.client().post("/questions/", json={"question": "What", "answer":"NO", "difficulty": 2, "category": "Art"})
+        # data = json.loads(res.data)
+        print("DATA", res)
 
+        # question = Question.query.filter_by("question"=="What").all()
 
+        self.assertEqual(res.status_code, 200)
+        self.assertIsNotNone(question)
+        self.assertTrue(data["difficulty"])
+        self.assertTrue(data["question"])
+        self.assertTrue(data["category"])
+        self.assertTrue(data["answer"])
 
 
     def tearDown(self):

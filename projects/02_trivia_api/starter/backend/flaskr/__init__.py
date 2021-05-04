@@ -182,6 +182,30 @@ def create_app(test_config=None):
 
 
 
+<<<<<<< HEAD
+=======
+    @app.route("/questions", methods=["POST"])
+    def post_new_question():
+        body = request.get_json()
+        print("BODY", body)
+
+        answer = body.get("answer", None)
+        question = body.get("question", None)
+        difficulty = body.get("difficulty", None)
+        category = body.get("category", None)
+
+        question = Question(answer=answer, question=question, category=category, difficulty=difficulty)
+
+        question.insert()
+
+        return json({
+            "success":True,
+            "answer": answer,
+            "question": question,
+            "difficulty": difficulty,
+            "category": category
+        })
+>>>>>>> master
 
 
 
