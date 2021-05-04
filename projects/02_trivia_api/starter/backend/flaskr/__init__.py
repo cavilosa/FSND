@@ -39,6 +39,7 @@ def create_app(test_config=None):
     setup_db(app)
     CORS(app)
 
+
   # '''
   # @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
   # '''
@@ -54,6 +55,8 @@ def create_app(test_config=None):
     @app.after_request
     def after_request(response):
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        response.headers.add('Access-Control-Allow-Oririn', 'http://localhost:3000')
         response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,PATCH')
         return response
   #
@@ -150,8 +153,20 @@ def create_app(test_config=None):
 
     @app.route("/questions", methods=["POST"])
     def post_new_question():
+
         body = request.get_json()
-        print("BODY", body)
+
+        if "searchTerm" in body:
+            search = "%{}%".format(body.get("searchTerm"))
+            questions = Question.query.filter(Question.question.ilike(search).all())
+            questions_list = [question.format() for question in questions]
+
+            return jsonify({
+                "success": True,
+                "questions": questions_list,
+                "total_questions": len(questions_list),
+                "current_category": None
+            })
 
         answer = body.get("answer", None)
         question = body.get("question", None)
@@ -160,7 +175,7 @@ def create_app(test_config=None):
 
         question = Question(answer=answer, question=question, category=category, difficulty=difficulty)
 
-        question.insert()
+        question.format().insert()
 
         return json({
             "success":True,
@@ -187,7 +202,22 @@ def create_app(test_config=None):
   # only question that include that string within their question.
   # Try using the word "title" to start.
   # '''
-  #
+    @app.route("/questions/", methods=["POST"])
+    def search_questions():
+        body = request.get_json()
+        search = "%{}%".format(body.get("searchTerm"))
+
+        if searchTerm in body:
+            questions = Question.query.filter(Question.question.ilike(search).all())
+            questions_list = [question.format() for question in questions]
+
+        return jsonify({
+            "success": True,
+            "questions": questions_list,
+            "total_questions": len(questions_list),
+            "current_category": None
+        })
+
   # '''
   # @TODO:
   # Create a GET endpoint to get questions based on category.
@@ -196,15 +226,6 @@ def create_app(test_config=None):
   # categories in the left column will cause only questions of that
   # category to be shown.
   # '''
-   # url: `/categories/${id}/questions`, //TODO: update request URL
-   # type: "GET",
-   # success: (result) => {
-   #   this.setState({
-   #     questions: result.questions,
-   #     totalQuestions: result.total_questions,
-   #     currentCategory: result.current_category })
-   #   return;
-   # },
 
     @app.route("/categories/<id>/questions")
     def retrieve_questions_by_category(id):
@@ -230,12 +251,6 @@ def create_app(test_config=None):
             "total_questions": len(questions),
             "current_category": category.format()["id"]
         })
-
-
-
-
-
-
 
 
   #
