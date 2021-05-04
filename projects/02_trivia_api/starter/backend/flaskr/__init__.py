@@ -155,17 +155,17 @@ def create_app(test_config=None):
         difficulty = body.get("difficulty", None)
         category = body.get("category", None)
 
-        question = Question(answer=answer, question=question, category=category, difficulty=difficulty)
+        if not answer or not question or not difficulty or not category:
+            abort(404)
 
-        question.insert()
+        try:
+            question = Question(answer=answer, question=question, category=category, difficulty=difficulty).format()
+            question.insert()
 
-        return json({
-            "success":True,
-            "answer": answer,
-            "question": question,
-            "difficulty": difficulty,
-            "category": category
-        })
+            return redirect(url_for("retrieve_questions"))
+
+        except:
+            abort(404)
 
 
 
