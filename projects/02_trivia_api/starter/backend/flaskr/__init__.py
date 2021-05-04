@@ -37,9 +37,9 @@ def create_app(test_config=None):
     print("Hello, world!")
     app = Flask(__name__)
     setup_db(app)
-    cors = CORS(app, resources={r"*": {"origins": "*"}})
-    # cors = CORS(app, resources={"r*/api/*": {"origins": "*"}},send_wildcard=True )
-    # CORS(app)
+    # cors = CORS(app, resources={r"*": {"origins": "http://localhost:3000"}})
+    # cors = CORS(app, resources={"r*/api/*": {"origins": "http://localhost:3000"}}, send_wildcard=True )
+    CORS(app)
 
   # '''
   # @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
@@ -55,9 +55,9 @@ def create_app(test_config=None):
   # '''
     @app.after_request
     def after_request(response):
-        response.headers.add('Access-Control-Allow-Headers', 'Origin,Content-Type,Authorization,true')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
         response.headers.add("Access-Control-Allow-Credentials", "true")
-        response.headers.add('Access-Control-Allow-Origin', "*")
+        response.headers.add('Access-Control-Allow-Origin', "http://localhost:3000")
         response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,PATCH')
         return response
   #
@@ -149,19 +149,19 @@ def create_app(test_config=None):
   # which will require the question and answer text,
   # category, and difficulty score.
 
-    @app.route("/questions", methods=["POST"])
+    @app.route("/questions/add", methods=["POST"])
     def post_new_question():
 
-        body = request.get_json()
-        print("POST ADD")
-
-        new_question = body.get('question')
-        new_answer = body.get('answer')
-        new_category = body.get('category')
-        new_difficulty = body.get('difficulty')
-
-        question = Question(question=new_question, answer=new_answer,
-                    difficulty=new_difficulty, category=new_category)
+        # body = request.get_json()
+        # print("POST ADD", body)
+        #
+        # new_question = body.get('question')
+        # new_answer = body.get('answer')
+        # new_category = body.get('category')
+        # new_difficulty = body.get('difficulty')
+        #
+        # question = Question(question=new_question, answer=new_answer,
+        #             difficulty=new_difficulty, category=new_category)
 
         # question = request.form.get("question")
         # answer = request.form.get("answer")
@@ -171,19 +171,26 @@ def create_app(test_config=None):
         #
         # question = Question(question=question, answer=answer,
         #             difficulty=difficulty, category=category)
+        #
+        # # if not new_question or not new_answer or not new_difficulty or not new_category:
+        # #     abort(404)
+        #
+        # if not question or not answer or not difficulty or not category:
+        #     abort(404)
+        #
+        #
+        # question = question.format()
+        # print("question", question)
+        # # question.insert()
+        #
 
-        if not question or not answer or not difficulty or not category:
-            abort(404)
-
-        print("question", question)
-        question.format().insert()
-
-        return jsonify({
-            "question": question,
-            "answer": answer,
-            "difficulty": difficulty,
-            "category": category
-        })
+        # print("DATA", data)
+        # return jsonify({
+        #     "question": question,
+        #     "answer": answer,
+        #     "difficulty": difficulty,
+        #     "category": category
+        # })
 
 
 
