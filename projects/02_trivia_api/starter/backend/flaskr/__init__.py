@@ -93,9 +93,10 @@ def create_app(test_config=None):
 
     @app.route("/questions/", methods=["GET", "DELETE", "POST"])
     def retrieve_questions():
+        print("retrieve quesitons")
         questions = [question.format() for question in Question.query.order_by(Question.id).all()]
         page = request.args.get("page")
-        # print("PAGE questions", page)
+
         print("retrieve questions")
         current_questions = paginate_questions(request, questions)
 
@@ -131,8 +132,9 @@ def create_app(test_config=None):
 
     @app.route("/questions/<id>", methods=["DELETE"])
     def delete_question(id):
+        print(id)
         question = Question.query.get(id)
-        print("QUESTION", question)
+        print("QUESTION", question(id))
 
         if question is None:
             abort(404)
@@ -148,49 +150,35 @@ def create_app(test_config=None):
   # Create an endpoint to POST a new question,
   # which will require the question and answer text,
   # category, and difficulty score.
-
-    @app.route("/questions/add", methods=["POST"])
-    def post_new_question():
-
-        # body = request.get_json()
-        # print("POST ADD", body)
-        #
-        # new_question = body.get('question')
-        # new_answer = body.get('answer')
-        # new_category = body.get('category')
-        # new_difficulty = body.get('difficulty')
-        #
-        # question = Question(question=new_question, answer=new_answer,
-        #             difficulty=new_difficulty, category=new_category)
-
-        # question = request.form.get("question")
-        # answer = request.form.get("answer")
-        # difficulty = request.form.get("question")
-        # category = request.form.get("category")
-        #
-        #
-        # question = Question(question=question, answer=answer,
-        #             difficulty=difficulty, category=category)
-        #
-        # # if not new_question or not new_answer or not new_difficulty or not new_category:
-        # #     abort(404)
-        #
-        # if not question or not answer or not difficulty or not category:
-        #     abort(404)
-        #
-        #
-        # question = question.format()
-        # print("question", question)
-        # # question.insert()
-        #
-
-        # print("DATA", data)
-        # return jsonify({
-        #     "question": question,
-        #     "answer": answer,
-        #     "difficulty": difficulty,
-        #     "category": category
-        # })
+    #
+    # @app.route("/questions/add", methods=["POST"])
+    # def post_new_question():
+    #
+    #     body = request.get_json()
+    #     print("POST ADD", body)
+    #
+    #     question = body.get('question')
+    #     answer = body.get('answer')
+    #     category = body.get('category')
+    #     difficulty = body.get('difficulty')
+    #
+    #     question = Question(question=question, answer=answer,
+    #                 difficulty=difficulty, category=category)
+    #
+    #     if not question or not answer or not difficulty or not category:
+    #         abort(404)
+    #
+    #
+    #     question = question.format()
+    #     print("question", question)
+    #     question.insert()
+    #
+    #     return jsonify({
+    #         "question": question,
+    #         "answer": answer,
+    #         "difficulty": difficulty,
+    #         "category": category
+    #     })
 
 
 
