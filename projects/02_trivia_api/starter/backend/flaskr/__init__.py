@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, abort, jsonify
 from flask import request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import random
 
 from models import setup_db, Question, Category
@@ -38,11 +38,16 @@ def create_app(test_config=None):
     app = Flask(__name__)
     setup_db(app)
     CORS(app)
+    # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 
   # '''
   # @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
   # '''
+
+
+
+
     @app.route("/")
     def sample():
         return jsonify({
@@ -59,6 +64,13 @@ def create_app(test_config=None):
         response.headers.add('Access-Control-Allow-Oririn', 'http://localhost:3000')
         response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,PATCH')
         return response
+
+    @app.route('/messages')
+    @cross_origin()
+    def get_messages():
+        return jsonify({
+            "success": True
+        })
   #
   # '''
   # @TODO:
