@@ -37,8 +37,8 @@ def create_app(test_config=None):
     print("Hello, world!")
     app = Flask(__name__)
     setup_db(app)
-    CORS(app)
-    # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+    # CORS(app)
+    cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 
   # '''
@@ -61,7 +61,7 @@ def create_app(test_config=None):
     def after_request(response):
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
         response.headers.add('Access-Control-Allow-Credentials', 'true')
-        response.headers.add('Access-Control-Allow-Oririn', 'http://localhost:3000')
+        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
         response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,PATCH')
         return response
 
