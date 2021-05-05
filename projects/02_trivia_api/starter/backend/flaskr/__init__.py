@@ -164,11 +164,15 @@ def create_app(test_config=None):
     def post_new_question():
 
         body = request.get_json()
+        print("BODY", body)
 
         answer = body.get("answer", None)
         question = body.get("question", None)
         difficulty = body.get("difficulty", None)
         category = body.get("category", None)
+
+        if not asnwer or not question or not difficulty or not category:
+            abort(400)
 
         question = Question(answer=answer, question=question, category=category, difficulty=difficulty)
 
@@ -277,5 +281,13 @@ def create_app(test_config=None):
             "error": 404,
             "messages": "resource not found"
         }), 404
+
+    @app.errorhandler(400)
+    def bad_request(error):
+        return jsonify({
+            "success": False,
+            "error": 400,
+            "message": "bad request"
+        }), 400
 
     return app

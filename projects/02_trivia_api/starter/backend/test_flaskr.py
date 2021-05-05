@@ -18,6 +18,14 @@ class TriviaTestCase(unittest.TestCase):
         self.database_path = "postgresql://{}/{}".format('postgres:cavilosa1@localhost:5432', self.database_name)
         setup_db(self.app, self.database_path)
 
+
+        self.new_question = {
+            "question": "What are we eating?",
+            "answer": "What What",
+            "difficulty": 1,
+            "category": 2
+        }
+
         # binds the app to the current context
         with self.app.app_context():
             self.db = SQLAlchemy()
@@ -109,9 +117,9 @@ class TriviaTestCase(unittest.TestCase):
     # the form will clear and the question will appear at the end of the last page
     # of the questions list in the "List" tab.
 
-    # def test_add_question(self):
+    # def test_post_question(self):
     #     """ADDING A NEW QUESTION"""
-    #     res = self.client().post("/questions/", json={"question": "What", "answer":"NO", "difficulty": 2, "category": "Art"})
+    #     res = self.client().post("/questions/", json=self.new_question)
     #     # data = json.loads(res.data)
     #     print("DATA", res)
     #
@@ -124,6 +132,29 @@ class TriviaTestCase(unittest.TestCase):
     #     self.assertTrue(data["category"])
     #     self.assertTrue(data["answer"])
 
+    def test_add_question(self):
+        """ADDING A NEW QUESTION"""
+        res = self.client().post("/questions/", json=self.new_question)
+        data = json.loads(res.data)
+        print("self.question", self.new_question)
+
+        questions = [question.format() for question in Question.query.all()]
+        question = Question.query.filter(Question.answer == "What What").first()
+        print("QUESTION TEST", question)
+        self.assertEqual(res.status_code, 200)
+        # self.assertIn(question, questions)
+
+    def test_error_adding_question(self):
+        """ERROR ADDING QUESTION"""
+
+        res = self.client().post("/questions/", json = {})
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 400)
+        self.assertFalse(data["success"])
+        self.assertEqual(data["messages"],  "bad request")
+        self.assertEqual(data["error"], 400)
+
 
     def test_questions_by_category(self):
         """GETTING QUESTIONS FROM A CATEGORY"""
@@ -135,6 +166,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(len(data["questions"]))
         self.assertTrue(data["total_questions"])
         self.assertTrue(data["current_category"])
+
 
     def test_404_questions_by_category(self):
         """Error getting questions by category"""
