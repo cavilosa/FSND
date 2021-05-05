@@ -160,7 +160,7 @@ def create_app(test_config=None):
   # which will require the question and answer text,
   # category, and difficulty score.
 
-    @app.route("/questions", methods=["POST"])
+    @app.route("/questions/submit", methods=["POST"])
     def post_new_question():
 
         body = request.get_json()
@@ -171,17 +171,17 @@ def create_app(test_config=None):
         difficulty = body.get("difficulty", None)
         category = body.get("category", None)
 
-        if not asnwer or not question or not difficulty or not category:
+        if not answer or not question or not difficulty or not category:
             abort(400)
 
         question = Question(answer=answer, question=question, category=category, difficulty=difficulty)
 
-        question.format().insert()
+        question.insert()
 
-        return json({
+        return jsonify({
             "success":True,
             "answer": answer,
-            "question": question,
+            "question": question.format(),
             "difficulty": difficulty,
             "category": category
         })
