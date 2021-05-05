@@ -143,7 +143,7 @@ def create_app(test_config=None):
         print("QUESTION", question)
 
         if question is None:
-            abort(404)
+            abort(422)
 
         question.delete()
 
@@ -289,5 +289,13 @@ def create_app(test_config=None):
             "error": 400,
             "message": "bad request"
         }), 400
+
+    @app.errorhandler(422)
+    def unprocessable(error):
+        return jsonify({
+           "success": False,
+           "error": 422,
+            "message": "You are trying to delete a question that does not exists in the database."
+      }), 422
 
     return app

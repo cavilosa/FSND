@@ -106,11 +106,11 @@ class TriviaTestCase(unittest.TestCase):
         data = json.loads(res.data)
         question = Question.query.get(6)
 
-        self.assertEqual(res.status_code, 404) # performing URL redirection.
+        self.assertEqual(res.status_code, 422) # performing URL redirection.
         self.assertIsNone(question)
         self.assertFalse(data["success"])
-        self.assertEqual(data["messages"], "resource not found")
-        self.assertEqual(data["error"], 404)
+        self.assertEqual(data["messages"], "You are trying to delete a question that does not exists in the database.")
+        self.assertEqual(data["error"], 422)
 
 
     # TEST: When you submit a question on the "Add" tab,
