@@ -102,9 +102,9 @@ class TriviaTestCase(unittest.TestCase):
 
     def test_404_question(self):
         """DELETING NOT FOUND QUESTION"""
-        res = self.client().delete("/questions/6")
+        res = self.client().delete("/questions/1")
         data = json.loads(res.data)
-        question = Question.query.get(6)
+        question = Question.query.get(1)
 
         self.assertEqual(res.status_code, 422) # performing URL redirection.
         self.assertIsNone(question)
@@ -112,25 +112,6 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["messages"], "You are trying to delete a question that does not exists in the database.")
         self.assertEqual(data["error"], 422)
 
-
-    # TEST: When you submit a question on the "Add" tab,
-    # the form will clear and the question will appear at the end of the last page
-    # of the questions list in the "List" tab.
-
-    # def test_post_question(self):
-    #     """ADDING A NEW QUESTION"""
-    #     res = self.client().post("/questions/", json=self.new_question)
-    #     # data = json.loads(res.data)
-    #     print("DATA", res)
-    #
-    #     # question = Question.query.filter_by("question"=="What").all()
-    #
-    #     self.assertEqual(res.status_code, 200)
-    #     self.assertIsNotNone(question)
-    #     self.assertTrue(data["difficulty"])
-    #     self.assertTrue(data["question"])
-    #     self.assertTrue(data["category"])
-    #     self.assertTrue(data["answer"])
 
     def test_add_question(self):
         """ADDING A NEW QUESTION"""
@@ -180,11 +161,27 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["messages"], "resource not found")
         self.assertEqual(data["error"], 404)
 
+    def test_quizzes(self):
+        """TESTING QUIZZES"""
+        res = self.client().post("/quizzes", json= {'previous_questions': [], 'quiz_category': {'type': 'History', 'id': '4'}})
+        data = json.loads(res.data)
+        print("QUIZZES", data)
 
+        self.assertTrue(res.status_code, 200)
+        self.assertTrue(data["success"])
+        self.assertIsNotNone(data["question"])
+        self.assertEqual(data["question"]["id"], 23)
 
+    def test_quizzes(self):
+        """FAILING QUIZZES"""
+        res = self.client().post("/quizzes", json={})
+        data = json.loads(res.data)
+        print("FAIL QUIS", data)
 
-
-
+        self.assertEqual(res.status_code, 400)
+        self.assertFalse(data["success"])
+        self.assertEqual(data["message"], "bad request")
+        self.assertEqual(data["error"], 400)
 
 
     def tearDown(self):
