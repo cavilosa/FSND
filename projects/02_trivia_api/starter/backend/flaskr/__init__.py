@@ -339,7 +339,7 @@ def create_app(test_config=None):
         return jsonify({
            "success": False,
            "error": 422,
-            "message": "You are trying to delete a question that does not exists in the database."
+            "messages": "You are trying to delete a question that does not exists in the database."
       }), 422
 
     return app

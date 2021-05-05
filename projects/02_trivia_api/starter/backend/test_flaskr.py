@@ -134,25 +134,27 @@ class TriviaTestCase(unittest.TestCase):
 
     def test_add_question(self):
         """ADDING A NEW QUESTION"""
-        res = self.client().post("/questions/", json=self.new_question)
+        res = self.client().post("/questions/submit", json=self.new_question)
         data = json.loads(res.data)
-        print("self.question", self.new_question)
 
-        questions = [question.format() for question in Question.query.all()]
         question = Question.query.filter(Question.answer == "What What").first()
-        print("QUESTION TEST", question)
         self.assertEqual(res.status_code, 200)
-        # self.assertIn(question, questions)
+        self.assertIsNotNone(question)
+        self.assertTrue(data["difficulty"])
+        self.assertTrue(data["question"])
+        self.assertTrue(data["category"])
+        self.assertTrue(data["answer"])
+
 
     def test_error_adding_question(self):
         """ERROR ADDING QUESTION"""
 
-        res = self.client().post("/questions/", json = {})
+        res = self.client().post("/questions/submit", json = {})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 400)
         self.assertFalse(data["success"])
-        self.assertEqual(data["messages"],  "bad request")
+        self.assertEqual(data["message"], "bad request")
         self.assertEqual(data["error"], 400)
 
 
