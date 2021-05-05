@@ -57,7 +57,7 @@ def create_app(test_config=None):
     @app.after_request
     def after_request(response):
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
-        # response.headers.add('Access-Control-Allow-Credentials', 'true')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
         # response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
         response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,PATCH')
         return response
@@ -206,19 +206,19 @@ def create_app(test_config=None):
     @app.route("/questions/search", methods=["POST"])
     def search_questions():
         body = request.get_json()
-
-
-        if "searchTerm" in body:
+        if body.get("searchTerm") != '':
             search = "%{}%".format(body.get("searchTerm"))
-            questions_list = Question.query.filter(Question.question.ilike(search).all())
+            questions_list = Question.query.filter(Question.question.ilike(search))
             questions = [question.format() for question in questions_list]
+        else:
+            questions = [question.format() for question in Question.query.order_by(Question.id).all()]
 
-            return jsonify({
-                "success": True,
-                "questions": questions,
-                "total_questions": len(questions),
-                "current_category": None
-            })
+        return jsonify({
+            "success": True,
+            "questions": questions,
+            "total_questions": len(questions),
+            "current_category": None
+        })
 
   # '''
   # @TODO:
