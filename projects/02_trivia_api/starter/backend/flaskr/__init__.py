@@ -57,7 +57,7 @@ def create_app(test_config=None):
     @app.after_request
     def after_request(response):
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
-        # response.headers.add('Access-Control-Allow-Credentials', 'true')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
         # response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
         response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,PATCH')
         return response
@@ -160,7 +160,7 @@ def create_app(test_config=None):
   # which will require the question and answer text,
   # category, and difficulty score.
 
-    @app.route("/questions", methods=["POST"])
+    @app.route("/questions/submit", methods=["POST"])
     def post_new_question():
 
         body = request.get_json()
@@ -171,17 +171,17 @@ def create_app(test_config=None):
         difficulty = body.get("difficulty", None)
         category = body.get("category", None)
 
-        if not asnwer or not question or not difficulty or not category:
+        if not answer or not question or not difficulty or not category:
             abort(400)
 
         question = Question(answer=answer, question=question, category=category, difficulty=difficulty)
 
-        question.format().insert()
+        question.insert()
 
-        return json({
+        return jsonify({
             "success":True,
             "answer": answer,
-            "question": question,
+            "question": question.format(),
             "difficulty": difficulty,
             "category": category
         })
@@ -206,19 +206,19 @@ def create_app(test_config=None):
     @app.route("/questions/search", methods=["POST"])
     def search_questions():
         body = request.get_json()
-
-
-        if "searchTerm" in body:
+        if body.get("searchTerm") != '':
             search = "%{}%".format(body.get("searchTerm"))
-            questions_list = Question.query.filter(Question.question.ilike(search).all())
+            questions_list = Question.query.filter(Question.question.ilike(search))
             questions = [question.format() for question in questions_list]
+        else:
+            questions = [question.format() for question in Question.query.order_by(Question.id).all()]
 
-            return jsonify({
-                "success": True,
-                "questions": questions,
-                "total_questions": len(questions),
-                "current_category": None
-            })
+        return jsonify({
+            "success": True,
+            "questions": questions,
+            "total_questions": len(questions),
+            "current_category": None
+        })
 
   # '''
   # @TODO:
