@@ -273,11 +273,12 @@ def create_app(test_config=None):
     def play_quizz():
         body = request.get_json()
 
-        previous_questions = body.get("previous_questionys")
+        previous_questions = body.get("previous_questions")
         quiz_category = body.get("quiz_category")
         categories = body.get("categories")
         # list_of_questions = []
         # print("CATegor", categories)
+        print("previous questions", previous_questions)
 
         if int(quiz_category["id"]) == 0:
             data = Question.query.all()
@@ -291,6 +292,8 @@ def create_app(test_config=None):
 
 
         for question in questions:
+            print("QUESTIONS", questions)
+            print("previous questions", previous_questions)
             if question["id"] not in previous_questions:
                 new_question = question
 
