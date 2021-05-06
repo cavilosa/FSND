@@ -269,13 +269,14 @@ def create_app(test_config=None):
   # and shown whether they were correct or not.
   # '''
 
-    @app.route("/quizzes", methods=["POST"])
+    @app.route("/quizzes/", methods=["POST"])
     def play_quizz():
         body = request.get_json()
 
         previous_questions = body.get("previous_questions")
         quiz_category = body.get("quiz_category")
         list_of_questions = []
+        print("QUIZZES", previous_questions, quiz_category["id"])
 
         if quiz_category["id"] != 0:
             data = Question.query.filter_by(category = quiz_category["id"]).all()

@@ -181,6 +181,28 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["messages"], "resource not found")
         self.assertEqual(data["error"], 404)
 
+    def test_quizzes(self):
+        """TESTING QUIZZES"""
+        res = self.client().post("/quizzes/", json= {'previous_questions': [], 'quiz_category': {'type': 'History', 'id': '4'}})
+        data = json.loads(res.data)
+        print("DATA", data)
+        print("QUIZZES", data)
+
+        self.assertTrue(res.status_code, 200)
+        self.assertTrue(data["success"])
+        self.assertIsNotNone(data["question"])
+        self.assertEqual(data["question"]["id"], 23)
+
+    def test_quizzes(self):
+        """FAILING QUIZZES"""
+        res = self.client().post("/quizzes/", json={'previous_questions': [], 'quiz_category': {'type': 'History', 'id': '9'}})
+        # data = json.loads(res.data)
+        print("FAIL QUIS", res)
+        #
+        self.assertEqual(res.status_code, 500)
+        # self.assertFalse(data["success"])
+        # self.assertEqual(data["message"], "bad request")
+        # self.assertEqual(data["error"], 400)
 
 
 
