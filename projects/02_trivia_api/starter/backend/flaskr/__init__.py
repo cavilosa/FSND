@@ -279,23 +279,15 @@ def create_app(test_config=None):
         previous_questions = body.get("previous_questions")
         quiz_category = body.get("quiz_category")
         list_of_questions = []
-        print("CAT QUIZZ", quiz_category["id"])
+        print("BODY QUIZ", body)
+
+        if not previous_questions or not quiz_category:
+            abort(400)
+
 
         if quiz_category["id"] != 0:
             data = Question.query.filter_by(category = quiz_category["id"]).all()
             questions = [question.format() for question in data]
-
-            # if questions is None:
-            #     abort(404)
-            #
-            # for question in questions:
-            #     if question["id"] not in previous_questions:
-            #         new_question = question
-            #
-            # return jsonify({
-            #     "success": True,
-            #     "question": new_question
-            # })
         else:
             data = Question.query.all()
             questions = [question.format() for question in data]
@@ -348,7 +340,7 @@ def create_app(test_config=None):
         return jsonify({
            "success": False,
            "error": 422,
-            "message": "You are trying to delete a question that does not exists in the database."
+            "messages": "You are trying to delete a question that does not exists in the database."
       }), 422
 
     return app
