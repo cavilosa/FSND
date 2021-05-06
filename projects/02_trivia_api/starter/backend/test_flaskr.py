@@ -166,9 +166,12 @@ class TriviaTestCase(unittest.TestCase):
 
     def test_quizzes(self):
         """TESTING QUIZZES"""
-        res = self.client().post("/quizzes/", json= {'previous_questions': [], 'quiz_category': {'type': 'History', 'id': '4'}})
+        res = self.client().post("/quizzes/", json= {'previous_questions': [], 'quiz_category': {'type': 'History', 'id': '4'},
+                                'categories': {'1': 'Science', '2': 'Art', '3': 'Geography', '4': 'History', '5': 'Entertainment',
+                                '6': 'Sports'}}
+                                )
         data = json.loads(res.data)
-
+        print("DATA categories", data)
         self.assertTrue(res.status_code, 200)
         self.assertTrue(data["success"])
         self.assertIsNotNone(data["question"])
@@ -176,7 +179,9 @@ class TriviaTestCase(unittest.TestCase):
 
     def test_quizzes(self):
         """FAILING QUIZZES"""
-        res = self.client().post("/quizzes/", json={'previous_questions': [], 'quiz_category': {'type': 'History', 'id': '9'}})
+        res = self.client().post("/quizzes/", json={'previous_questions': [], 'quiz_category': {'type': 'History', 'id': '9'},
+                                   'categories': {'1': 'Science', '2': 'Art', '3': 'Geography', '4': 'History', '5': 'Entertainment',
+                                   '6': 'Sports'}})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)

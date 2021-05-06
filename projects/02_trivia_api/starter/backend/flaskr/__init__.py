@@ -273,15 +273,17 @@ def create_app(test_config=None):
     def play_quizz():
         body = request.get_json()
 
-        previous_questions = body.get("previous_questions")
+        previous_questions = body.get("previous_questionys")
         quiz_category = body.get("quiz_category")
-        list_of_questions = []
-        print("CATE 0", quiz_category)
+        categories = body.get("categories")
+        # list_of_questions = []
+        # print("CATegor", categories)
 
         if int(quiz_category["id"]) == 0:
             data = Question.query.all()
             questions = [question.format() for question in data]
-        elif int(quiz_category["id"]) > 0 and int(quiz_category["id"]) <=6:
+
+        elif int(quiz_category["id"]) > 0 and int(quiz_category["id"]) <= len(categories):
             data = Question.query.filter_by(category = quiz_category["id"]).all()
             questions = [question.format() for question in data]
         else:
@@ -300,10 +302,12 @@ def create_app(test_config=None):
             last_question = False
 
 
+
         return jsonify({
             "success": True,
             "question": new_question,
-            "last_question": last_question
+            "last_question": last_question,
+            "questions": len(questions)
         })
 
 

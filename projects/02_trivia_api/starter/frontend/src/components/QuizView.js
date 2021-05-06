@@ -16,6 +16,7 @@ class QuizView extends Component {
         numCorrect: 0,
         currentQuestion: {},
         lastQuestion: false,
+        questions: 0,
         guess: '',
         forceEnd: false
     }
@@ -55,18 +56,21 @@ class QuizView extends Component {
       contentType: 'application/json',
       data: JSON.stringify({
         previous_questions: previousQuestions,
-        quiz_category: this.state.quizCategory
+        quiz_category: this.state.quizCategory,
+        categories: this.state.categories
       }),
       xhrFields: {
         withCredentials: true
       },
       crossDomain: true,
       success: (result) => {
+          console.log("RESULT", result)
         this.setState({
           showAnswer: false,
           previousQuestions: previousQuestions,
           currentQuestion: result.question,
           lastQuestion: result.last_question,
+          questions: result.questions,
           guess: '',
           forceEnd: result.question ? false : true
         })
@@ -153,7 +157,7 @@ class QuizView extends Component {
 
   renderPlay(){
     return  this.state.lastQuestion || this.state.forceEnd
-    // return this.state.previousQuestions.length === questionsPerPlay || this.state.forceEnd
+    // return this.state.previousQuestions.length+1 === this.state.questions || this.state.forceEnd
       ? this.renderFinalScore()
       : this.state.showAnswer
         ? this.renderCorrectAnswer()
