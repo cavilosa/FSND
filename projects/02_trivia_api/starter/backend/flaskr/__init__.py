@@ -276,10 +276,7 @@ def create_app(test_config=None):
         previous_questions = body.get("previous_questions")
         quiz_category = body.get("quiz_category")
         list_of_questions = []
-        print("BODY QUIZ", body)
 
-        if not previous_questions or not quiz_category:
-            abort(400)
 
         if quiz_category["id"] != 0:
             data = Question.query.filter_by(category = quiz_category["id"]).all()
