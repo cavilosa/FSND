@@ -279,22 +279,12 @@ def create_app(test_config=None):
         previous_questions = body.get("previous_questions")
         quiz_category = body.get("quiz_category")
         list_of_questions = []
-<<<<<<< HEAD
-        print("BODY QUIZ", body)
-
-        if not previous_questions or not quiz_category:
-            abort(400)
-=======
->>>>>>> working-branch
 
 
         if quiz_category["id"] != 0:
             data = Question.query.filter_by(category = quiz_category["id"]).all()
             questions = [question.format() for question in data]
-<<<<<<< HEAD
-=======
 
->>>>>>> working-branch
         else:
             data = Question.query.all()
             questions = [question.format() for question in data]
