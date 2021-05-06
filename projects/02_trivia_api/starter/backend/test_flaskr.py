@@ -103,7 +103,7 @@ class TriviaTestCase(unittest.TestCase):
     #     self.assertIsNone(question)
 
 
-    def test_404_question(self):
+    def test_422_question(self):
         """DELETING NOT FOUND QUESTION"""
         res = self.client().delete("/questions/6")
         data = json.loads(res.data)
@@ -112,7 +112,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 422) # performing URL redirection.
         self.assertIsNone(question)
         self.assertFalse(data["success"])
-        self.assertEqual(data["messages"], "You are trying to delete a question that does not exists in the database.")
+        self.assertEqual(data["message"], "You are trying to delete a question that does not exists in the database.")
         self.assertEqual(data["error"], 422)
 
 
@@ -150,7 +150,7 @@ class TriviaTestCase(unittest.TestCase):
     def test_error_adding_question(self):
         """ERROR ADDING QUESTION"""
 
-        res = self.client().post("/questions/", json = {})
+        res = self.client().post("/questions/")
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 400)
