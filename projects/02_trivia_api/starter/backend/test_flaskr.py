@@ -11,7 +11,6 @@ from flaskr import create_app
 from models import setup_db, Question, Category
 
 password = os.environ.get("password")
-print("PASSWORD TEST", password)
 
 class TriviaTestCase(unittest.TestCase):
     """This class represents the trivia test case"""
@@ -106,17 +105,18 @@ class TriviaTestCase(unittest.TestCase):
     #     self.assertIsNone(question)
 
 
-    def test_422_question(self):
+    def test_404_question(self):
         """DELETING NOT FOUND QUESTION"""
-        res = self.client().delete("/questions/1")
+        res = self.client().delete("/questions/6")
         data = json.loads(res.data)
-        question = Question.query.get(1)
+        question = Question.query.get(6)
 
-        self.assertEqual(res.status_code, 422) # performing URL redirection.
+        self.assertEqual(res.status_code, 422)
         self.assertIsNone(question)
         self.assertFalse(data["success"])
         self.assertEqual(data["messages"], "You are trying to delete a question that does not exists in the database.")
         self.assertEqual(data["error"], 422)
+
 
 
     def test_add_question(self):
@@ -124,14 +124,14 @@ class TriviaTestCase(unittest.TestCase):
         res = self.client().post("/questions/submit", json=self.new_question)
         data = json.loads(res.data)
 
-        question = Question.query.filter(Question.answer == "What What").first()
-        self.assertEqual(res.status_code, 200)
-        self.assertIsNotNone(question)
-        self.assertTrue(data["difficulty"])
-        self.assertTrue(data["question"])
-        self.assertTrue(data["category"])
-        self.assertTrue(data["answer"])
+        questions = [question.format() for question in Question.query.all()]
+        list = []
+        for question in questions:
+            list.append(question["id"])
+        question = Question.query.filter(Question.answer == "What What").first().format()["id"]
 
+        self.assertEqual(res.status_code, 200)
+        self.assertIn(question, list)
 
     def test_error_adding_question(self):
         """ERROR ADDING QUESTION"""
@@ -141,7 +141,7 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 400)
         self.assertFalse(data["success"])
-        self.assertEqual(data["message"], "bad request")
+        self.assertEqual(data["message"],  "bad request")
         self.assertEqual(data["error"], 400)
 
 
@@ -149,7 +149,6 @@ class TriviaTestCase(unittest.TestCase):
         """GETTING QUESTIONS FROM A CATEGORY"""
         res = self.client().get("/categories/3/questions")
         data = json.loads(res.data)
-        # print("DATA", data)
 
         self.assertEqual(res.status_code, 200)
         self.assertTrue(len(data["questions"]))
@@ -169,10 +168,12 @@ class TriviaTestCase(unittest.TestCase):
 
     def test_quizzes(self):
         """TESTING QUIZZES"""
-        res = self.client().post("/quizzes", json= {'previous_questions': [], 'quiz_category': {'type': 'History', 'id': '4'}})
+        res = self.client().post("/quizzes/", json= {'previous_questions': [], 'quiz_category': {'type': 'History', 'id': '4'},
+                                'categories': {'1': 'Science', '2': 'Art', '3': 'Geography', '4': 'History', '5': 'Entertainment',
+                                '6': 'Sports'}}
+                                )
         data = json.loads(res.data)
-        print("QUIZZES", data)
-
+        print("DATA categories", data)
         self.assertTrue(res.status_code, 200)
         self.assertTrue(data["success"])
         self.assertIsNotNone(data["question"])
@@ -180,14 +181,20 @@ class TriviaTestCase(unittest.TestCase):
 
     def test_quizzes(self):
         """FAILING QUIZZES"""
-        res = self.client().post("/quizzes", json={})
+        res = self.client().post("/quizzes/", json={'previous_questions': [], 'quiz_category': {'type': 'History', 'id': '9'},
+                                   'categories': {'1': 'Science', '2': 'Art', '3': 'Geography', '4': 'History', '5': 'Entertainment',
+                                   '6': 'Sports'}})
         data = json.loads(res.data)
-        print("FAIL QUIS", data)
 
-        self.assertEqual(res.status_code, 400)
+        self.assertEqual(res.status_code, 404)
         self.assertFalse(data["success"])
-        self.assertEqual(data["message"], "bad request")
-        self.assertEqual(data["error"], 400)
+        self.assertEqual(data["messages"], "resource not found")
+        self.assertEqual(data["error"], 404)
+
+
+
+
+
 
 
     def tearDown(self):

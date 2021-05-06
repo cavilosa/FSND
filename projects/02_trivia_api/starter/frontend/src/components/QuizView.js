@@ -3,7 +3,7 @@ import $ from 'jquery';
 
 import '../stylesheets/QuizView.css';
 
-// const questionsPerPlay = 5;
+const questionsPerPlay = 5;
 
 class QuizView extends Component {
   constructor(props){
@@ -16,6 +16,7 @@ class QuizView extends Component {
         numCorrect: 0,
         currentQuestion: {},
         lastQuestion: false,
+        questions: 0,
         guess: '',
         forceEnd: false
     }
@@ -49,24 +50,27 @@ class QuizView extends Component {
     if(this.state.currentQuestion.id) { previousQuestions.push(this.state.currentQuestion.id) }
 
     $.ajax({
-      url: '/quizzes', //TODO: update request URL
+      url: '/quizzes/', //TODO: update request URL
       type: "POST",
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify({
         previous_questions: previousQuestions,
-        quiz_category: this.state.quizCategory
+        quiz_category: this.state.quizCategory,
+        categories: this.state.categories
       }),
       xhrFields: {
         withCredentials: true
       },
       crossDomain: true,
       success: (result) => {
+          console.log("RESULT", result)
         this.setState({
           showAnswer: false,
           previousQuestions: previousQuestions,
           currentQuestion: result.question,
           lastQuestion: result.last_question,
+          questions: result.questions,
           guess: '',
           forceEnd: result.question ? false : true
         })
@@ -152,7 +156,8 @@ class QuizView extends Component {
   }
 
   renderPlay(){
-    return this.state.forceEnd || this.state.lastQuestion
+    return  this.state.lastQuestion || this.state.forceEnd
+    // return this.state.previousQuestions.length+1 === this.state.questions || this.state.forceEnd
       ? this.renderFinalScore()
       : this.state.showAnswer
         ? this.renderCorrectAnswer()

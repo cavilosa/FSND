@@ -1,5 +1,3 @@
-from dotenv import load_dotenv
-load_dotenv()
 import os
 from flask import Flask, request, abort, jsonify
 from flask import request, redirect, url_for
@@ -10,8 +8,7 @@ import random
 from models import setup_db, Question, Category
 
 QUESTIONS_PER_PAGE = 10
-password = os.environ.get("password")
-print("environment password", os.environ.get("password"))
+
 def paginate_questions(request, selection):
     page = request.args.get("page", 1, type=int)
     print("PAGE paginate", page)
@@ -272,42 +269,48 @@ def create_app(test_config=None):
   # and shown whether they were correct or not.
   # '''
 
-    @app.route("/quizzes", methods=["POST"])
+    @app.route("/quizzes/", methods=["POST"])
     def play_quizz():
         body = request.get_json()
 
         previous_questions = body.get("previous_questions")
         quiz_category = body.get("quiz_category")
-        list_of_questions = []
-        print("BODY QUIZ", body)
+        categories = body.get("categories")
+        # list_of_questions = []
+        # print("CATegor", categories)
+        print("previous questions", previous_questions)
 
-        if not previous_questions or not quiz_category:
-            abort(400)
-
-
-        if quiz_category["id"] != 0:
-            data = Question.query.filter_by(category = quiz_category["id"]).all()
-            questions = [question.format() for question in data]
-        else:
+        if int(quiz_category["id"]) == 0:
             data = Question.query.all()
             questions = [question.format() for question in data]
 
-        if questions is None:
+        elif int(quiz_category["id"]) > 0 and int(quiz_category["id"]) <= len(categories):
+            data = Question.query.filter_by(category = quiz_category["id"]).all()
+            questions = [question.format() for question in data]
+        else:
             abort(404)
 
+
         for question in questions:
+            print("QUESTIONS", questions)
+            print("previous questions", previous_questions)
             if question["id"] not in previous_questions:
                 new_question = question
+
+        print("quizzes len", len(previous_questions), len(questions) )
 
         if len(previous_questions)+1 == len(questions):
             last_question = True
         else:
             last_question = False
 
+
+
         return jsonify({
             "success": True,
             "question": new_question,
-            "last_question": last_question
+            "last_question": last_question,
+            "questions": len(questions)
         })
 
 
