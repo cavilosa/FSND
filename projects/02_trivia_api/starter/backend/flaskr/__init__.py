@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+load_dotenv()
 import os
 from flask import Flask, request, abort, jsonify
 from flask import request, redirect, url_for
@@ -8,7 +10,8 @@ import random
 from models import setup_db, Question, Category
 
 QUESTIONS_PER_PAGE = 10
-
+password = os.environ.get("password")
+print("environment password", os.environ.get("password"))
 def paginate_questions(request, selection):
     page = request.args.get("page", 1, type=int)
     print("PAGE paginate", page)
