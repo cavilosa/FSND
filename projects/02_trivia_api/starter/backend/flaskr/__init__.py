@@ -290,21 +290,21 @@ def create_app(test_config=None):
         else:
             abort(404)
 
+        if len(previous_questions) == len(questions)+1:
+            last_question = True
+        else:
+            last_question = False
 
         for question in questions:
-            print("QUESTIONS", questions)
-            print("previous questions", previous_questions)
+
             if question["id"] not in previous_questions:
                 new_question = question
 
         print("quizzes len", len(previous_questions), len(questions) )
 
-        if len(previous_questions)+1 == len(questions):
+        if  len(questions) == 0:
+            new_question = ''
             last_question = True
-        else:
-            last_question = False
-
-
 
         return jsonify({
             "success": True,
