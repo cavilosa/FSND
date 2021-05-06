@@ -276,27 +276,29 @@ def create_app(test_config=None):
         previous_questions = body.get("previous_questions")
         quiz_category = body.get("quiz_category")
         list_of_questions = []
-        print("QUIZZES", previous_questions, quiz_category["id"])
+        print("CATE 0", quiz_category)
 
-        if quiz_category["id"] != 0:
-            data = Question.query.filter_by(category = quiz_category["id"]).all()
-            questions = [question.format() for question in data]
-
-        else:
+        if int(quiz_category["id"]) == 0:
             data = Question.query.all()
             questions = [question.format() for question in data]
-
-        if questions is None:
+        elif int(quiz_category["id"]) > 0 and int(quiz_category["id"]) <=6:
+            data = Question.query.filter_by(category = quiz_category["id"]).all()
+            questions = [question.format() for question in data]
+        else:
             abort(404)
+
 
         for question in questions:
             if question["id"] not in previous_questions:
                 new_question = question
 
+        print("quizzes len", len(previous_questions), len(questions) )
+
         if len(previous_questions)+1 == len(questions):
             last_question = True
         else:
             last_question = False
+
 
         return jsonify({
             "success": True,

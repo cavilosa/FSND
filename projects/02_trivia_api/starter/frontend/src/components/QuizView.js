@@ -3,7 +3,7 @@ import $ from 'jquery';
 
 import '../stylesheets/QuizView.css';
 
-// const questionsPerPlay = 5;
+const questionsPerPlay = 5;
 
 class QuizView extends Component {
   constructor(props){
@@ -152,7 +152,8 @@ class QuizView extends Component {
   }
 
   renderPlay(){
-    return this.state.forceEnd || this.state.lastQuestion
+    return  this.state.lastQuestion || this.state.forceEnd
+    // return this.state.previousQuestions.length === questionsPerPlay || this.state.forceEnd
       ? this.renderFinalScore()
       : this.state.showAnswer
         ? this.renderCorrectAnswer()

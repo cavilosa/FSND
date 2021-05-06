@@ -109,43 +109,27 @@ class TriviaTestCase(unittest.TestCase):
         data = json.loads(res.data)
         question = Question.query.get(6)
 
-        self.assertEqual(res.status_code, 422) # performing URL redirection.
+        self.assertEqual(res.status_code, 422)
         self.assertIsNone(question)
         self.assertFalse(data["success"])
         self.assertEqual(data["messages"], "You are trying to delete a question that does not exists in the database.")
         self.assertEqual(data["error"], 422)
 
 
-    # TEST: When you submit a question on the "Add" tab,
-    # the form will clear and the question will appear at the end of the last page
-    # of the questions list in the "List" tab.
-
-    # def test_post_question(self):
-    #     """ADDING A NEW QUESTION"""
-    #     res = self.client().post("/questions/", json=self.new_question)
-    #     # data = json.loads(res.data)
-    #     print("DATA", res)
-    #
-    #     # question = Question.query.filter_by("question"=="What").all()
-    #
-    #     self.assertEqual(res.status_code, 200)
-    #     self.assertIsNotNone(question)
-    #     self.assertTrue(data["difficulty"])
-    #     self.assertTrue(data["question"])
-    #     self.assertTrue(data["category"])
-    #     self.assertTrue(data["answer"])
 
     def test_add_question(self):
         """ADDING A NEW QUESTION"""
         res = self.client().post("/questions/submit", json=self.new_question)
         data = json.loads(res.data)
-        print("self.question", self.new_question)
 
         questions = [question.format() for question in Question.query.all()]
-        question = Question.query.filter(Question.answer == "What What").first()
-        print("QUESTION TEST", question)
+        list = []
+        for question in questions:
+            list.append(question["id"])
+        question = Question.query.filter(Question.answer == "What What").first().format()["id"]
+
         self.assertEqual(res.status_code, 200)
-        # self.assertIn(question, questions)
+        self.assertIn(question, list)
 
     def test_error_adding_question(self):
         """ERROR ADDING QUESTION"""
@@ -163,7 +147,6 @@ class TriviaTestCase(unittest.TestCase):
         """GETTING QUESTIONS FROM A CATEGORY"""
         res = self.client().get("/categories/3/questions")
         data = json.loads(res.data)
-        # print("DATA", data)
 
         self.assertEqual(res.status_code, 200)
         self.assertTrue(len(data["questions"]))
@@ -185,8 +168,6 @@ class TriviaTestCase(unittest.TestCase):
         """TESTING QUIZZES"""
         res = self.client().post("/quizzes/", json= {'previous_questions': [], 'quiz_category': {'type': 'History', 'id': '4'}})
         data = json.loads(res.data)
-        print("DATA", data)
-        print("QUIZZES", data)
 
         self.assertTrue(res.status_code, 200)
         self.assertTrue(data["success"])
@@ -196,13 +177,12 @@ class TriviaTestCase(unittest.TestCase):
     def test_quizzes(self):
         """FAILING QUIZZES"""
         res = self.client().post("/quizzes/", json={'previous_questions': [], 'quiz_category': {'type': 'History', 'id': '9'}})
-        # data = json.loads(res.data)
-        print("FAIL QUIS", res)
-        #
-        self.assertEqual(res.status_code, 500)
-        # self.assertFalse(data["success"])
-        # self.assertEqual(data["message"], "bad request")
-        # self.assertEqual(data["error"], 400)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertFalse(data["success"])
+        self.assertEqual(data["messages"], "resource not found")
+        self.assertEqual(data["error"], 404)
 
 
 
