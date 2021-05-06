@@ -296,9 +296,15 @@ def create_app(test_config=None):
             if question["id"] not in previous_questions:
                 new_question = question
 
+        if len(previous_questions)+1 == len(questions):
+            last_question = True
+        else:
+            last_question = False
+
         return jsonify({
             "success": True,
-            "question": new_question
+            "question": new_question,
+            "last_question": last_question
         })
 
 
