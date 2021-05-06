@@ -1,5 +1,3 @@
-from dotenv import load_dotenv
-load_dotenv()
 import os
 from flask import Flask, request, abort, jsonify
 from flask import request, redirect, url_for
@@ -10,8 +8,7 @@ import random
 from models import setup_db, Question, Category
 
 QUESTIONS_PER_PAGE = 10
-password = os.environ.get("password")
-print("environment password", os.environ.get("password"))
+
 def paginate_questions(request, selection):
     page = request.args.get("page", 1, type=int)
     print("PAGE paginate", page)
@@ -279,23 +276,11 @@ def create_app(test_config=None):
         previous_questions = body.get("previous_questions")
         quiz_category = body.get("quiz_category")
         list_of_questions = []
-        print("CAT QUIZZ", quiz_category["id"])
-
+    
         if quiz_category["id"] != 0:
             data = Question.query.filter_by(category = quiz_category["id"]).all()
             questions = [question.format() for question in data]
 
-            # if questions is None:
-            #     abort(404)
-            #
-            # for question in questions:
-            #     if question["id"] not in previous_questions:
-            #         new_question = question
-            #
-            # return jsonify({
-            #     "success": True,
-            #     "question": new_question
-            # })
         else:
             data = Question.query.all()
             questions = [question.format() for question in data]
@@ -348,7 +333,7 @@ def create_app(test_config=None):
         return jsonify({
            "success": False,
            "error": 422,
-            "message": "You are trying to delete a question that does not exists in the database."
+            "messages": "You are trying to delete a question that does not exists in the database."
       }), 422
 
     return app
