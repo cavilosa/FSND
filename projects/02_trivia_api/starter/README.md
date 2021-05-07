@@ -15,12 +15,21 @@ What this application can:
 ### Backend
 
 The `./backend` directory contains Flask and SQLAlchemy server.
+All backend code follows [PEP8 style guidelines](https://www.python.org/dev/peps/pep-0008/).
+The backend runs on `http://127.0.0.1:5000/` by default and is a proxy in the frontend configuration.
 
 ### Frontend
 
 The `./frontend` directory contains a complete React frontend to consume the data from the Flask server.
 
 ## Getting Started
+
+### Authentication
+This version of the application does not require authentication or API keys.
+
+### Environment Variables
+
+All environment variables are stored in the .env file and called in the code with python-dotenv library. In order to create the database path you will need your password, stored in the .env file on the root folder of the backend.
 
 ### Installing Dependencies
 
@@ -85,6 +94,9 @@ Setting the `FLASK_ENV` variable to `development` will detect file changes and r
 
 Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` directory and the `__init__.py` file to find the application.
 
+
+### Running FrontEnd
+
 #### Installing Node and NPM
 
 This project depends on Nodejs and Node Package Manager (NPM). Before continuing, you must download and install Node (the download includes NPM) from [https://nodejs.com/en/download](https://nodejs.org/en/download/).
@@ -107,10 +119,49 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser. T
 npm start
 ```
 
-
 ## Game Play Mechanics
 
 The game designed to play all the questions in the category and will end when there are no more new questions.
+
+
+## Error Handling
+
+Errors are returned as JSON objects in the following format:
+```
+{
+    "success": False,
+    "error": 400,
+    "message": "bad request"
+}
+```
+
+The API will return w error types:
+    404 - resource not found,
+    400 - bad request,
+    422 - You are trying to delete a question that does not exists in the database.
+
+
+## Endpoints
+
+#### GET /categories
+This endpoint  handles GET requests for all available categories. Returns jesonyfied object with success value and a dictionary of categories:
+```
+({
+    "success":True,
+    "categories": dict
+})
+```
+The dictionary of categories contains "id" and "type" keys:
+```
+{
+    "id": 2,
+    "type": Art
+}
+```
+Sample:
+```bash
+curl http://127.0.0.1:5000/categories
+```
 
 
 ## Tasks

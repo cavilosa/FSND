@@ -99,7 +99,7 @@ def create_app(test_config=None):
   # This endpoint should return a list of questions,
   # number of total questions, current category, categories.
 
-    @app.route("/questions/", methods=["GET", "DELETE", "POST"])
+    @app.route("/questions/", methods=["GET"])
     def retrieve_questions():
         questions = [question.format() for question in Question.query.order_by(Question.id).all()]
         page = request.args.get("page")
