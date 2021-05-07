@@ -108,11 +108,10 @@ npm start
 ```
 
 
-## Optional: Game Play Mechanics
+## Game Play Mechanics
 
-Currently, when a user plays the game they play up to five questions of the chosen category. If there are fewer than five questions in a category, the game will end when there are no more questions in that category.
+The game designed to play all the questions in the category and will end when there are no more new questions.
 
-You can optionally update this game play to increase the number of questions or whatever other game mechanics you decide. Make sure to specify the new mechanics of the game in the README of the repo you submit so the reviewer
 
 ## Tasks
 
@@ -153,10 +152,13 @@ GET '/categories'
 
 
 ## Testing
-To run the tests, run
+Log into your psql and run:
+```bash
+drop database trivia_test
+create database trivia_test
 ```
-dropdb trivia_test
-createdb trivia_test
-psql trivia_test < trivia.psql
+After exiting the psql, populate the database with entries and run the tests:
+```bash
+psql -d trivia_test -U postgres -a -f trivia.psql
 python test_flaskr.py
 ```
