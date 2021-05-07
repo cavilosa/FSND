@@ -77,7 +77,7 @@ class QuizView extends Component {
         return;
       },
       error: (error) => {
-        alert('Unable to load question. Please try your request again')
+        alert("Couldn't load the questions.")
         return;
       }
     })
@@ -156,9 +156,9 @@ class QuizView extends Component {
   }
 
   renderPlay(){
-    // return  this.state.lastQuestion || this.state.forceEnd
-     // return this.state.previousQuestions.length === questionsPerPlay || this.state.forceEnd
-    return this.state.previousQuestions.length+1 === this.state.questions || this.state.forceEnd
+    return  this.state.lastQuestion || this.state.forceEnd
+    // return this.state.previousQuestions.length === questionsPerPlay || this.state.forceEnd
+    // return this.state.previousQuestions.length+1 === this.state.questions || this.state.forceEnd
       ? this.renderFinalScore()
       : this.state.showAnswer
         ? this.renderCorrectAnswer()

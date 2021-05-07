@@ -295,14 +295,14 @@ def create_app(test_config=None):
         else:
             last_question = False
 
+        print("questions", questions)
         for question in questions:
-
             if question["id"] not in previous_questions:
                 new_question = question
 
-        print("quizzes len", len(previous_questions), len(questions) )
-
-        if  len(questions) == 0:
+        # print("quizzes len", len(previous_questions), len(questions) )
+        #
+        if  len(questions) == len(previous_questions):
             new_question = ''
             last_question = True
 
