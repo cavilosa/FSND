@@ -159,8 +159,75 @@ The dictionary of categories contains "id" and "type" keys:
 }
 ```
 Sample:
-```bash
-curl http://127.0.0.1:5000/categories
+`curl http://127.0.0.1:5000/categories`
+
+
+#### GET /questions/
+This route returns categories, current_category, paginated list of questions(10 per page),
+and a number of total questions:
+```
+{
+  "categories": {
+    "1": "Science",
+    "2": "Art",
+    "3": "Geography",
+    "4": "History",
+    "5": "Entertainment",
+    "6": "Sports"
+  },
+  "current_category": null,
+  "questions": [
+    {
+      "answer": "Maya Angelou",
+      "category": 4,
+      "difficulty": 2,
+      "id": 5,
+      "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+    },
+    {
+      "answer": "Edward Scissorhands",
+      "category": 5,
+      "difficulty": 3,
+      "id": 6,
+      "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+    }
+    ],
+    "total_questions": 16
+}
+```
+If number of page is higher then available questions in the database (`curl http://127.0.0.1:5000/questions/?page=100`), the route will return an error:
+
+```
+{
+  "error": 404,
+  "messages": "resource not found",
+  "success": false
+}
+```
+
+Sample: `curl http://127.0.0.1:5000/questions/`
+
+
+
+#### Delete /questions/<id>
+Deletes a question from the database by its id and doesn't return new data except the success value.
+```
+({
+    "success": True
+})
+```
+Sample:
+
+`curl http://127.0.0.1:5000/questions/6 -X DELETE`
+
+If the question doesn't exist returns error:
+```
+{
+  "error": 422,
+  "messages": "You are trying to delete a question that does not exists in the database.",
+  "success": false
+}
+
 ```
 
 

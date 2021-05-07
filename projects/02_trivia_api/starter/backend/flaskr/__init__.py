@@ -102,9 +102,9 @@ def create_app(test_config=None):
     @app.route("/questions/", methods=["GET"])
     def retrieve_questions():
         questions = [question.format() for question in Question.query.order_by(Question.id).all()]
-        page = request.args.get("page")
+        # page = request.args.get("page")
         # print("PAGE questions", page)
-        print("retrieve questions")
+        # print("retrieve questions")
         current_questions = paginate_questions(request, questions)
 
 
