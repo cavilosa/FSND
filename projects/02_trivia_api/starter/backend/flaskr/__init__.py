@@ -306,6 +306,10 @@ def create_app(test_config=None):
             new_question = ''
             last_question = True
 
+        # if  len(questions) == 0:
+        #     new_question = ''
+        #     last_question = True
+
         return jsonify({
             "success": True,
             "question": new_question,
