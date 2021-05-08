@@ -132,13 +132,24 @@ Errors are returned as JSON objects in the following format:
     "success": False,
     "error": 400,
     "message": "bad request"
+},
+{
+  "error": 404,
+  "messages": "resource not found",
+  "success": false
+},
+{
+  "error": 422,
+  "messages": "You are trying to delete a question that does not exists in the database.",
+  "success": false
 }
 ```
 
-The API will return w error types:
-    404 - resource not found,
-    400 - bad request,
-    422 - You are trying to delete a question that does not exists in the database.
+The API can return these error types:
+
+* 404 - resource not found,
+* 400 - bad request,
+* 422 - You are trying to delete a question that does not exists in the database.
 
 
 ## Endpoints
@@ -195,15 +206,8 @@ and a number of total questions:
     "total_questions": 16
 }
 ```
-If number of page is higher then available questions in the database (`curl http://127.0.0.1:5000/questions/?page=100`), the route will return an error:
+If number of page is higher then available questions in the database (`curl http://127.0.0.1:5000/questions/?page=100`), the route will return an error 404.
 
-```
-{
-  "error": 404,
-  "messages": "resource not found",
-  "success": false
-}
-```
 
 Sample: `curl http://127.0.0.1:5000/questions/`
 
@@ -220,15 +224,45 @@ Sample:
 
 `curl http://127.0.0.1:5000/questions/6 -X DELETE`
 
-If the question doesn't exist returns error:
+If the question doesn't exist returns the error 422.
+
+
+#### POST /questions/submit
+
+To post a new question the application will use this endpoint to request answer, question, difficulty and category from the frontend in order to add a new question to the database in the backend. Returns:
 ```
-{
-  "error": 422,
-  "messages": "You are trying to delete a question that does not exists in the database.",
-  "success": false
-}
+({
+    "success": True,
+    "answer": answer,
+    "question": question,
+    "difficulty": difficulty,
+    "category": category
+})
+```
+In the frontend the application will reset the form.
+
+Sample: `curl http://127.0.0.1:5000/questions/submit -X POST -H "Content-Type: application/json" -d '{"answer":"Neverwhere", "question":"What wrote Neil Gaiman", "difficulty":"3",
+"category": "2"}'`
+
+If json didn't provide with full information, e.g. no answer or question, the application will return the error 400.
+
+
+#### POST /questions/search
+
+In the search field om the frontend a user can do a search through the questions based on the search string. This endpoint takes the searchTerm argument from the frontend and returns a list of questions, containing the searchTerm, success, a number of total questions in the list and a current category, in a format of jsonified object:
 
 ```
+({
+    "success": True,
+    "questions": questions,
+    "total_questions": len(questions),
+    "current_category": None
+})
+```
+Inappropriate request, like `curl http://127.0.0.1:5000/questions/search -X POST -H "Content-Type: application/json" -d '{"search": "title"}' ` will give an error 400.
+
+Sample: `curl http://127.0.0.1:5000/questions/search -X POST -H "Content-Type: application/json" -d '{"searchTerm": "title"}'
+`
 
 
 ## Tasks
