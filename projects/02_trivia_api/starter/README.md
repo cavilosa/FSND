@@ -274,8 +274,7 @@ Addes a new question to the database. Returns:
 
 - Inappropriate request, like `curl http://127.0.0.1:5000/questions/search -X POST -H "Content-Type: application/json" -d '{"search": "title"}' ` will give an error 400.
 
-- Sample: `curl http://127.0.0.1:5000/questions/search -X POST -H "Content-Type: application/json" -d '{"searchTerm": "title"}'
-`
+- Sample: `curl http://127.0.0.1:5000/questions/search -X POST -H "Content-Type: application/json" -d '{"searchTerm": "title"}'`
 
 #### GET /categories/<id>
 - Returns all questions in the category by its id number, success, a number of questions in the category and a selected category's id number.
@@ -297,18 +296,23 @@ Addes a new question to the database. Returns:
 #### POST /quizzes/
 - Returns success value, next question, last question and the length of total questions on the selected category. The additional "categories" dictionary will allow modify number of categories further in the development.
 ```
-({
-    "success": True,
-    "question": new_question,
-    "last_question": last_question,
-    "questions": len(questions)
-})
+{
+  "last_question": false,
+  "question": {
+    "answer": "Agra",
+    "category": 3,
+    "difficulty": 2,
+    "id": 15,
+    "question": "The Taj Mahal is located in which Indian city?"
+  },
+  "questions": 2,
+  "success": true
+}
+
 ```
 - Request Argiment: previous_question, quiz_category and categories.
 
-<!-- curl http://127.0.0.1:5000/quizzes/ -X POST -H "Content-Type: application/json" -d '{\'categories/': {'1': 'Science', '2': 'Art', '3': 'Geography', '4': 'History', '5': 'Entertainment', '6': 'Sports'}, 'previous_questions': [], 'quiz_category': {'id': '4', 'type': 'History'}}' -->
-
-- Sample: curl http://127.0.0.1:5000/quizzes/ -X POST -H "Content-Type: application/json" -d ' {'previous_questions': [], 'quiz_category': {'type': 'Geography', 'id': '3'}, 'categories': {'1': 'Science', '2': 'Art', '3': 'Geography', '4': 'History', '5': 'Entertainment', '6': 'Sports'}}'
+- Sample: curl http://127.0.0.1:5000/quizzes/ -X POST -H "Content-Type: application/json" -d '{"previous_questions": [], "quiz_category": {"type": "Geography", "id": "3"}, "categories": {"1": "Science", "2": "Art", "3": "Geography", "4": "History", "5": "Entertainment", "6": "Sports"}}'
 
 
 ## Testing
