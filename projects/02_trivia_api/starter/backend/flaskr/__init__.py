@@ -40,20 +40,14 @@ def create_app(test_config=None):
     # CORS(app)
     cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
-
-  # '''
-  # @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
-  # '''
-
     @app.route("/")
     def sample():
         return jsonify({
             "success": True
         })
 
-  # '''
-  # @TODO: Use the after_request decorator to set Access-Control-Allow
-  # '''
+# after_request decorator to sets Access-Control-Allow
+
     @app.after_request
     def after_request(response):
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
@@ -99,12 +93,12 @@ def create_app(test_config=None):
   # This endpoint should return a list of questions,
   # number of total questions, current category, categories.
 
-    @app.route("/questions/", methods=["GET", "DELETE", "POST"])
+    @app.route("/questions/", methods=["GET"])
     def retrieve_questions():
         questions = [question.format() for question in Question.query.order_by(Question.id).all()]
-        page = request.args.get("page")
+        # page = request.args.get("page")
         # print("PAGE questions", page)
-        print("retrieve questions")
+        # print("retrieve questions")
         current_questions = paginate_questions(request, questions)
 
 
@@ -206,19 +200,22 @@ def create_app(test_config=None):
     @app.route("/questions/search", methods=["POST"])
     def search_questions():
         body = request.get_json()
-        if body.get("searchTerm") != '':
+
+        if body.get("searchTerm"):
             search = "%{}%".format(body.get("searchTerm"))
             questions_list = Question.query.filter(Question.question.ilike(search))
             questions = [question.format() for question in questions_list]
-        else:
-            questions = [question.format() for question in Question.query.order_by(Question.id).all()]
 
-        return jsonify({
-            "success": True,
-            "questions": questions,
-            "total_questions": len(questions),
-            "current_category": None
-        })
+            return jsonify({
+                "success": True,
+                "questions": questions,
+                "total_questions": len(questions),
+                "current_category": None
+            })
+
+        else:
+            print("no search term")
+            abort(404)
 
   # '''
   # @TODO:
@@ -272,13 +269,15 @@ def create_app(test_config=None):
     @app.route("/quizzes/", methods=["POST"])
     def play_quizz():
         body = request.get_json()
+        print("BODY quizzes", body)
 
         previous_questions = body.get("previous_questions")
         quiz_category = body.get("quiz_category")
         categories = body.get("categories")
+        print("LEN CAT", len(categories))
         # list_of_questions = []
         # print("CATegor", categories)
-        print("previous questions", previous_questions)
+        # print("previous questions", previous_questions)
 
         if int(quiz_category["id"]) == 0:
             data = Question.query.all()
@@ -349,5 +348,13 @@ def create_app(test_config=None):
            "error": 422,
             "messages": "You are trying to delete a question that does not exists in the database."
       }), 422
+
+    @app.errorhandler(500)
+    def server_error(error):
+        return jsonify({
+           "success": False,
+           "error": 500,
+            "messages": "Internal server error."
+      }), 500
 
     return app
