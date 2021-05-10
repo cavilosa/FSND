@@ -24,6 +24,8 @@ The `./frontend` directory contains a complete React frontend to consume the dat
 
 ## Getting Started
 
+Following commands are for bash command line on Windows 10.
+
 ### Authentication
 This version of the application does not require authentication or API keys.
 
@@ -224,7 +226,8 @@ and a number of total questions:
 #### Delete /questions/<id>
 - Deletes a question from the database by its id and doesn't return new data except the success value.
 
-- Requests Arguments: <id>
+- Requests Arguments: `<id>`
+- Returns:
 ```
 ({
     "success": True
@@ -284,7 +287,7 @@ Addes a new question to the database. Returns:
     "current_category": category.format()["id"]
 })
 ```
-- Request Arguments: <id>
+- Request Arguments: `<id>`
 
 - Sample ` curl http://127.0.0.1:5000/categories/1/questions`
 
@@ -314,7 +317,7 @@ Log into your psql and run:
 drop database trivia_test
 create database trivia_test
 ```
-After exiting the psql, populate the database with entries and run the tests:
+After exiting psql, populate the database with entries and run the tests:
 ```bash
 psql -d trivia_test -U postgres -a -f trivia.psql
 python test_flaskr.py
