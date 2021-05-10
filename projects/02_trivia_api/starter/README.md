@@ -264,6 +264,37 @@ Inappropriate request, like `curl http://127.0.0.1:5000/questions/search -X POST
 Sample: `curl http://127.0.0.1:5000/questions/search -X POST -H "Content-Type: application/json" -d '{"searchTerm": "title"}'
 `
 
+#### GET /categories/<id>
+In this endpoint the application returns all questions in the category by its id number, success, a number of questions in the category and a selected category's id number.
+```
+({
+    "success": True,
+    "questions": questions,
+    "total_questions": len(questions),
+    "current_category": category.format()["id"]
+})
+```
+Sample ` curl http://127.0.0.1:5000/categories/1/questions`
+Returns 404 error if the category is not found and an empty list of questions if there are none in the category.
+
+
+#### POST /quizzes/
+This route requests frontend for previous_question, quiz_category and categories parameters and returns success value, next question, last question and the length of total questions on the selected category.
+The additional categories dictionary will allow modify number of categories further in the development.
+```
+({
+    "success": True,
+    "question": new_question,
+    "last_question": last_question,
+    "questions": len(questions)
+})
+```
+
+<!-- curl http://127.0.0.1:5000/quizzes/ -X POST -H "Content-Type: application/json" -d '{\'categories/': {'1': 'Science', '2': 'Art', '3': 'Geography', '4': 'History', '5': 'Entertainment', '6': 'Sports'}, 'previous_questions': [], 'quiz_category': {'id': '4', 'type': 'History'}}' -->
+
+
+
+
 
 ## Tasks
 

@@ -218,7 +218,7 @@ def create_app(test_config=None):
                 "total_questions": len(questions),
                 "current_category": None
             })
-            
+
         else:
             print("no search term")
             abort(404)
@@ -275,13 +275,15 @@ def create_app(test_config=None):
     @app.route("/quizzes/", methods=["POST"])
     def play_quizz():
         body = request.get_json()
+        print("BODY quizzes", body)
 
         previous_questions = body.get("previous_questions")
         quiz_category = body.get("quiz_category")
         categories = body.get("categories")
+        print("LEN CAT", len(categories))
         # list_of_questions = []
         # print("CATegor", categories)
-        print("previous questions", previous_questions)
+        # print("previous questions", previous_questions)
 
         if int(quiz_category["id"]) == 0:
             data = Question.query.all()
@@ -348,5 +350,13 @@ def create_app(test_config=None):
            "error": 422,
             "messages": "You are trying to delete a question that does not exists in the database."
       }), 422
+
+    @app.errorhandler(500)
+    def server_error(error):
+        return jsonify({
+           "success": False,
+           "error": 500,
+            "messages": "Internal server error."
+      }), 500
 
     return app
