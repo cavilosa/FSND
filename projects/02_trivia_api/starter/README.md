@@ -1,4 +1,4 @@
-# Full Stack API Final Project
+# Full Stack API Second Project
 
 ## Full Stack Trivia API
 
@@ -29,7 +29,7 @@ This version of the application does not require authentication or API keys.
 
 ### Environment Variables
 
-All environment variables are stored in the .env file and called in the code with python-dotenv library. In order to create the database path you will need your password, stored in the .env file on the root folder of the backend.
+All environment variables are stored in the `.env` file and called in the code with `python-dotenv` library. In order to create the database path you will need your password, stored in the .env file in the root folder of the backend.
 
 ### Installing Dependencies
 
@@ -97,7 +97,7 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
 
 ### Running FrontEnd
 
-#### Installing Node and NPM
+#### Installing Node.js and NPM
 
 This project depends on Nodejs and Node Package Manager (NPM). Before continuing, you must download and install Node (the download includes NPM) from [https://nodejs.com/en/download](https://nodejs.org/en/download/).
 
@@ -121,7 +121,7 @@ npm start
 
 ## Game Play Mechanics
 
-The game designed to play all the questions in the category and will end when there are no more new questions.
+The game designed to play all the questions in the category and will end when there are no more new questions to ask.
 
 
 ## Error Handling
@@ -142,6 +142,11 @@ Errors are returned as JSON objects in the following format:
   "error": 422,
   "messages": "You are trying to delete a question that does not exists in the database.",
   "success": false
+},
+{
+   "success": False,
+   "error": 500,
+    "messages": "Internal server error."
 }
 ```
 
@@ -149,7 +154,8 @@ The API can return these error types:
 
 * 404 - resource not found,
 * 400 - bad request,
-* 422 - You are trying to delete a question that does not exists in the database.
+* 422 - You are trying to delete a question that does not exists in the database,
+* 500 - Internal Server Error.
 
 
 ## Endpoints
@@ -216,22 +222,21 @@ and a number of total questions:
 
 
 #### Delete /questions/<id>
-Deletes a question from the database by its id and doesn't return new data except the success value.
+- Deletes a question from the database by its id and doesn't return new data except the success value.
+
+- Requests Arguments: <id>
 ```
 ({
     "success": True
 })
 ```
-Sample:
-
-`curl http://127.0.0.1:5000/questions/6 -X DELETE`
+-Sample: `curl http://127.0.0.1:5000/questions/6 -X DELETE`
 
 If the question doesn't exist returns the error 422.
 
 
 #### POST /questions/submit
-
-To post a new question the application will use this endpoint to request answer, question, difficulty and category from the frontend in order to add a new question to the database in the backend. Returns:
+Addes a new question to the database. Returns:
 ```
 ({
     "success": True,
@@ -241,18 +246,19 @@ To post a new question the application will use this endpoint to request answer,
     "category": category
 })
 ```
-In the frontend the application will reset the form.
+- Request Arguments: answer, question, difficulty and category.
 
-Sample: `curl http://127.0.0.1:5000/questions/submit -X POST -H "Content-Type: application/json" -d '{"answer":"Neverwhere", "question":"What wrote Neil Gaiman", "difficulty":"3",
+- In the frontend the application will reset the form.
+
+- Sample: `curl http://127.0.0.1:5000/questions/submit -X POST -H "Content-Type: application/json" -d '{"answer":"Neverwhere", "question":"What wrote Neil Gaiman", "difficulty":"3",
 "category": "2"}'`
 
-If json didn't provide with full information, e.g. no answer or question, the application will return the error 400.
+- If json didn't provide with full information, e.g. no answer or question, the application will return the error 400.
 
 
 #### POST /questions/search
 
-In the search field om the frontend a user can do a search through the questions based on the search string. This endpoint takes the searchTerm argument from the frontend and returns a list of questions, containing the searchTerm, success, a number of total questions in the list and a current category, in a format of jsonified object:
-
+- Returns a list of questions, containing the searchTerm, success, a number of total questions in the list and a current category, in a format of a jsonified object:
 ```
 ({
     "success": True,
@@ -261,13 +267,15 @@ In the search field om the frontend a user can do a search through the questions
     "current_category": None
 })
 ```
-Inappropriate request, like `curl http://127.0.0.1:5000/questions/search -X POST -H "Content-Type: application/json" -d '{"search": "title"}' ` will give an error 400.
+-Request Arguments: searchTerm.
 
-Sample: `curl http://127.0.0.1:5000/questions/search -X POST -H "Content-Type: application/json" -d '{"searchTerm": "title"}'
+- Inappropriate request, like `curl http://127.0.0.1:5000/questions/search -X POST -H "Content-Type: application/json" -d '{"search": "title"}' ` will give an error 400.
+
+- Sample: `curl http://127.0.0.1:5000/questions/search -X POST -H "Content-Type: application/json" -d '{"searchTerm": "title"}'
 `
 
 #### GET /categories/<id>
-In this endpoint the application returns all questions in the category by its id number, success, a number of questions in the category and a selected category's id number.
+- Returns all questions in the category by its id number, success, a number of questions in the category and a selected category's id number.
 ```
 ({
     "success": True,
@@ -276,13 +284,15 @@ In this endpoint the application returns all questions in the category by its id
     "current_category": category.format()["id"]
 })
 ```
-Sample ` curl http://127.0.0.1:5000/categories/1/questions`
-Returns 404 error if the category is not found and an empty list of questions if there are none in the category.
+- Request Arguments: <id>
+
+- Sample ` curl http://127.0.0.1:5000/categories/1/questions`
+
+- Returns 404 error if the category is not found and an empty list of questions if there are none in the category.
 
 
 #### POST /quizzes/
-This route requests frontend for previous_question, quiz_category and categories parameters and returns success value, next question, last question and the length of total questions on the selected category.
-The additional categories dictionary will allow modify number of categories further in the development.
+- Returns success value, next question, last question and the length of total questions on the selected category. The additional "categories" dictionary will allow modify number of categories further in the development.
 ```
 ({
     "success": True,
@@ -291,49 +301,11 @@ The additional categories dictionary will allow modify number of categories furt
     "questions": len(questions)
 })
 ```
+- Request Argiment: previous_question, quiz_category and categories.
 
 <!-- curl http://127.0.0.1:5000/quizzes/ -X POST -H "Content-Type: application/json" -d '{\'categories/': {'1': 'Science', '2': 'Art', '3': 'Geography', '4': 'History', '5': 'Entertainment', '6': 'Sports'}, 'previous_questions': [], 'quiz_category': {'id': '4', 'type': 'History'}}' -->
 
-
-
-
-
-## Tasks
-
-One note before you delve into your tasks: for each endpoint you are expected to define the endpoint and response data. The frontend will be a plentiful resource because it is set up to expect certain endpoints and response data formats already. You should feel free to specify endpoints in your own way; if you do so, make sure to update the frontend or you will get some unexpected behavior.
-
-1. Use Flask-CORS to enable cross-domain requests and set response headers.
-2. Create an endpoint to handle GET requests for questions, including pagination (every 10 questions). This endpoint should return a list of questions, number of total questions, current category, categories.
-3. Create an endpoint to handle GET requests for all available categories.
-4. Create an endpoint to DELETE question using a question ID.
-5. Create an endpoint to POST a new question, which will require the question and answer text, category, and difficulty score.
-6. Create a POST endpoint to get questions based on category.
-7. Create a POST endpoint to get questions based on a search term. It should return any questions for whom the search term is a substring of the question.
-8. Create a POST endpoint to get questions to play the quiz. This endpoint should take category and previous question parameters and return a random questions within the given category, if provided, and that is not one of the previous questions.
-9. Create error handlers for all expected errors including 400, 404, 422 and 500.
-
-REVIEW_COMMENT
-```
-This README is missing documentation of your endpoints. Below is an example for your endpoint to get all categories. Please use it as a reference for creating your documentation and resubmit your code.
-
-Endpoints
-GET '/categories'
-GET ...
-POST ...
-DELETE ...
-
-GET '/categories'
-- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
-- Request Arguments: None
-- Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs.
-{'1' : "Science",
-'2' : "Art",
-'3' : "Geography",
-'4' : "History",
-'5' : "Entertainment",
-'6' : "Sports"}
-
-```
+- Sample: curl http://127.0.0.1:5000/quizzes/ -X POST -H "Content-Type: application/json" -d ' {'previous_questions': [], 'quiz_category': {'type': 'Geography', 'id': '3'}, 'categories': {'1': 'Science', '2': 'Art', '3': 'Geography', '4': 'History', '5': 'Entertainment', '6': 'Sports'}}'
 
 
 ## Testing
