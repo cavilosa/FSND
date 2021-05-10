@@ -155,7 +155,9 @@ The API can return these error types:
 ## Endpoints
 
 #### GET /categories
-This endpoint  handles GET requests for all available categories. Returns jesonyfied object with success value and a dictionary of categories:
+- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category.
+- Request Arguments: None
+- Returns: An object with a single key, categories:
 ```
 ({
     "success":True,
@@ -174,7 +176,7 @@ Sample:
 
 
 #### GET /questions/
-This route returns categories, current_category, paginated list of questions(10 per page),
+- Returns categories, current_category, paginated list of questions(10 per page),
 and a number of total questions:
 ```
 {
@@ -206,11 +208,11 @@ and a number of total questions:
     "total_questions": 16
 }
 ```
-If number of page is higher then available questions in the database (`curl http://127.0.0.1:5000/questions/?page=100`), the route will return an error 404.
+- Request Arguments: None
 
+- If number of page is higher then available questions in the database (`curl http://127.0.0.1:5000/questions/?page=100`), the route will return an error 404.
 
-Sample: `curl http://127.0.0.1:5000/questions/`
-
+- Sample: `curl http://127.0.0.1:5000/questions/`
 
 
 #### Delete /questions/<id>
