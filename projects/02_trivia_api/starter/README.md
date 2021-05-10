@@ -312,7 +312,7 @@ Addes a new question to the database. Returns:
 ```
 - Request Argiment: previous_question, quiz_category and categories.
 
-- Sample: curl http://127.0.0.1:5000/quizzes/ -X POST -H "Content-Type: application/json" -d '{"previous_questions": [], "quiz_category": {"type": "Geography", "id": "3"}, "categories": {"1": "Science", "2": "Art", "3": "Geography", "4": "History", "5": "Entertainment", "6": "Sports"}}'
+- Sample: `curl http://127.0.0.1:5000/quizzes/ -X POST -H "Content-Type: application/json" -d '{"previous_questions": [], "quiz_category": {"type": "Geography", "id": "3"}, "categories": {"1": "Science", "2": "Art", "3": "Geography", "4": "History", "5": "Entertainment", "6": "Sports"}}'`
 
 
 ## Testing
