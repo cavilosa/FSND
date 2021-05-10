@@ -31,7 +31,6 @@ def retrieve_categories():
 
 def create_app(test_config=None):
   # create and configure the app
-    print("Hello, world!")
     app = Flask(__name__)
     setup_db(app)
     cors = CORS(app, resources={r"/*": {"origins": "*"}})
@@ -188,7 +187,8 @@ def create_app(test_config=None):
         quiz_category = body.get("quiz_category")
         categories = body.get("categories")
 
-        if int(quiz_category["id"]) == 0: # fetch all questions for "all" category
+
+        if int(quiz_category["id"]) == 0: # fetch all questions for all the categories
             data = Question.query.all()
             questions = [question.format() for question in data]
 
