@@ -17,9 +17,23 @@ CORS(app)
 !! NOTE THIS MUST BE UNCOMMENTED ON FIRST RUN
 !! Running this funciton will add one
 '''
-# db_drop_and_create_all()
+db_drop_and_create_all()
+
+# drink = Drink(
+#     title='water',
+#     recipe='[{"name": "water", "color": "blue", "parts": 1}]'
+#     )
+#
+# drink.insert()
 
 # ROUTES
+@app.route('/test')
+def get_test():
+    print("test")
+    return jsonify({
+        "success": True
+    })
+
 '''
 @TODO implement endpoint
     GET /drinks
@@ -28,6 +42,19 @@ CORS(app)
     returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
         or appropriate status code indicating reason for failure
 '''
+
+@app.route("/drinks")
+def get_drinks():
+    try:
+        drinks_full_list = Drink.query.all()
+        drinks = [drink.short() for drink in drinks_full_list]
+
+        return jsonify({
+            "success": True,
+            "drinks": drinks
+        })
+    except:
+        abort(500)
 
 
 '''
@@ -38,7 +65,19 @@ CORS(app)
     returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
         or appropriate status code indicating reason for failure
 '''
+@app.route("/drinks-detail")
+@requires_auth("get:drinks-detail")
+def get_drinks_detail(payload):
+    try:
+        drinks_full_list = Drink.query.all()
+        drinks = [drink.long() for drink in drinks_full_list]
 
+        return jsonify({
+            "success":True,
+            "drinks": drinks
+        })
+    except:
+        abort(401)
 
 '''
 @TODO implement endpoint
@@ -49,6 +88,9 @@ CORS(app)
     returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the newly created drink
         or appropriate status code indicating reason for failure
 '''
+# @app.route("/drinks", methods = ["POST"])
+# @requires_auth("post:drinks")
+# def post_drink():
 
 
 '''
