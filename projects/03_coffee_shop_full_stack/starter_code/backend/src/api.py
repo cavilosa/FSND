@@ -19,15 +19,6 @@ CORS(app)
 '''
 db_drop_and_create_all()
 
-# drink = Drink(
-#     title='water',
-#     recipe='[{"name": "water", "color": "blue", "parts": 1}]'
-#     )
-#
-# drink.insert()
-
-# ROUTES
-
 '''
 @TODO implement endpoint
     GET /drinks
@@ -39,16 +30,17 @@ db_drop_and_create_all()
 
 @app.route("/drinks")
 def get_drinks():
-    try:
-        drinks_full_list = Drink.query.all()
-        drinks = [drink.short() for drink in drinks_full_list]
+    drinks_full_list = Drink.query.all()
 
-        return jsonify({
-            "success": True,
-            "drinks": drinks
-        })
-    except:
-        abort(500)
+    if not drinks_full_list:
+        abort(404)
+
+    drinks = [drink.short() for drink in drinks_full_list]
+
+    return jsonify({
+        "success": True,
+        "drinks": drinks
+    })
 
 
 '''
@@ -62,16 +54,15 @@ def get_drinks():
 @app.route("/drinks-detail")
 @requires_auth("get:drinks-detail")
 def get_drinks_detail(payload):
-    try:
-        drinks_full_list = Drink.query.all()
-        drinks = [drink.long() for drink in drinks_full_list]
+    drinks_full_list = Drink.query.all()
+    if not drinks_full_list:
+        abort(404)
+    drinks = [drink.long() for drink in drinks_full_list]
 
-        return jsonify({
-            "success":True,
-            "drinks": drinks
-        })
-    except:
-        abort(401)
+    return jsonify({
+        "success":True,
+        "drinks": drinks
+    })
 
 '''
 @TODO implement endpoint
@@ -86,15 +77,18 @@ def get_drinks_detail(payload):
 @requires_auth("post:drinks")
 def post_drink(payload):
     body = request.get_json()
+    if not body:
+        abort(404)
 
     title = body.get("title")
     recipe = body.get("recipe")
+    if not title or not recipe:
+        abort(404)
 
     drink = Drink(
         title = title,
         recipe = json.dumps(recipe)
-        )
-    print(drink.long())
+    )
 
     drink.insert()
 
@@ -122,24 +116,18 @@ def patch_drink(payload, id):
     drink = Drink.query.get(id)
     # check if the drink with the id exists
     if not drink:
-        raise AuthError({
-            "code": "invalid drink id",
-            "description": f"The drink with id {id} doesn't exist"
-        }, 400)
+        abort(404)
 
     # getting json information about what to uodate
     body = request.get_json()
     if not body:
-        raise AuthError({
-            "code": "no update infromation available",
-            "description": f"can't update drink with id {id}, no json onject available"
-        }, 400)
+        abort(404)
 
     # checking for the title from update info
     title = body.get("title")
     if title is not None:
         drink.title = title
-        
+
     # checking for the recipe from update info
     recipe = body.get("recipe")
     if recipe is not None:
@@ -153,6 +141,8 @@ def patch_drink(payload, id):
         "drink": drink.long()
     })
 
+
+
 '''
 @TODO implement endpoint
     DELETE /drinks/<id>
@@ -163,6 +153,20 @@ def patch_drink(payload, id):
     returns status code 200 and json {"success": True, "delete": id} where id is the id of the deleted record
         or appropriate status code indicating reason for failure
 '''
+
+@app.route("/drinks/<id>", methods=["DELETE"])
+@requires_auth("delete:drinks")
+def delete_drink(payliad, id):
+    drink = Drink.query.get(id)
+    if not drink:
+        abort(404)
+
+    drink.delete()
+
+    return jsonify({
+        "success": True,
+        "delete": id
+    })
 
 
 # Error Handling
@@ -179,6 +183,22 @@ def unprocessable(error):
         "message": "unprocessable"
     }), 422
 
+@app.errorhandler(404)
+def resource_not_found(error):
+    return jsonify({
+        "success": False,
+        "error": 404,
+        "message": "resource not found"
+    }), 404
+
+@app.errorhandler(AuthError)
+def auth_error(error):
+    print("ERROR", type(error))
+    return jsonify({
+        "success": False,
+        "error": error.error,
+        "code": error.status_code
+    }), 403
 
 '''
 @TODO implement error handlers using the @app.errorhandler(error) decorator
@@ -194,6 +214,7 @@ def unprocessable(error):
 '''
 @TODO implement error handler for 404
     error handler should conform to general task above
+     ({'code': 'unauthorized', 'description': 'Permission not found.'}, 403)
 '''
 
 
