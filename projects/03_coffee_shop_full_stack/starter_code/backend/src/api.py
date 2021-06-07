@@ -86,13 +86,15 @@ def get_drinks_detail(payload):
 @requires_auth("post:drinks")
 def post_drink(payload):
     body = request.get_json()
-    # drink {'title': 'Water3', 'recipe': {'name': 'Water', 'color': 'blue', 'parts': 1}}
+
     title = body.get("title")
     recipe = body.get("recipe")
+
     drink = Drink(
         title = title,
         recipe = json.dumps(recipe)
         )
+    print(drink.long())
 
     drink.insert()
 
@@ -100,7 +102,6 @@ def post_drink(payload):
         "success": True,
         "drinks": drink.long()
     })
-
 
 
 '''
@@ -114,7 +115,32 @@ def post_drink(payload):
     returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the updated drink
         or appropriate status code indicating reason for failure
 '''
-
+@app.route("/drinks/<id>", methods=["PATCH"])
+@requires_auth("patch:drinks")
+def patch_drink(payload, id):
+    # getting drink object from the database
+    drink = Drink.query.get(id)
+    if not drink:
+        raise AuthError({
+            "code": "invalid drink id",
+            "description": f"The drink with id {id} doesn't exist"
+        }, 400)
+    # getting json information about update in the drink
+    body = request.get_json()
+    # getting title from update info
+    title = body.get("title")
+    if title is not None:
+        drink.title = title
+    # getting recipe from update info
+    recipe = body.get("recipe")
+    if recipe is not None:
+        drink.recipe = json.dumps(recipe)
+    # updating database object with new title or/and recipe
+    drink.update()
+    return jsonify({
+        "success": True,
+        "drink": drink.long()
+    })
 
 '''
 @TODO implement endpoint
