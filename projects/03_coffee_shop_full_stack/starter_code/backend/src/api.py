@@ -120,23 +120,34 @@ def post_drink(payload):
 def patch_drink(payload, id):
     # getting drink object from the database
     drink = Drink.query.get(id)
+    # check if the drink with the id exists
     if not drink:
         raise AuthError({
             "code": "invalid drink id",
             "description": f"The drink with id {id} doesn't exist"
         }, 400)
-    # getting json information about update in the drink
+
+    # getting json information about what to uodate
     body = request.get_json()
-    # getting title from update info
+    if not body:
+        raise AuthError({
+            "code": "no update infromation available",
+            "description": f"can't update drink with id {id}, no json onject available"
+        }, 400)
+
+    # checking for the title from update info
     title = body.get("title")
     if title is not None:
         drink.title = title
-    # getting recipe from update info
+        
+    # checking for the recipe from update info
     recipe = body.get("recipe")
     if recipe is not None:
         drink.recipe = json.dumps(recipe)
+
     # updating database object with new title or/and recipe
     drink.update()
+
     return jsonify({
         "success": True,
         "drink": drink.long()
