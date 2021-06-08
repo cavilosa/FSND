@@ -35,6 +35,7 @@ def get_token_auth_header():
     """
     auth = request.headers.get('Authorization', None)
     if not auth:
+        print("GET AUTH", auth)
         raise AuthError({
             'code': 'authorization_header_missing',
             'description': 'Authorization header is expected.'
@@ -81,10 +82,12 @@ def check_permissions(permission, payload):
                         }, 400)
 
     if permission not in payload["permissions"]:
-         raise AuthError({
+        raise AuthError({
             'code': 'unauthorized',
             'description': 'Permission not found.'
-        }, 403)
+        }, 401)
+
+
 
     return True
 
@@ -169,14 +172,7 @@ def requires_auth(permission=""):
         @wraps(f)
         def wrapper(*args, **kwargs):
             token = get_token_auth_header()
-            try:
-                payload = verify_decode_jwt(token)
-            except:
-                raise AuthError({
-                    "code": 401,
-                    "description": "payload not found"
-                }, 401)
-            # payload = verify_decode_jwt(token)
+            payload = verify_decode_jwt(token)
             check_permissions(permission, payload)
 
             return f(payload, *args, **kwargs)

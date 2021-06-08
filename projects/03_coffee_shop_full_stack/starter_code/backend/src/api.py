@@ -94,7 +94,7 @@ def post_drink(payload):
 
     return jsonify({
         "success": True,
-        "drinks": drink.long()
+        "drinks": [drink.long()]
     })
 
 
@@ -131,16 +131,17 @@ def patch_drink(payload, id):
     # checking for the recipe from update info
     recipe = body.get("recipe")
     if recipe is not None:
-        drink.recipe = json.dumps(recipe)
+        # drink.recipe = [json.dumps(recipe)]
+        # recipe=json.dumps([recipe])
+        # drink.recipe = json.dumps([recipe])
+        drink.recipe = [recipe]
 
     # updating database object with new title or/and recipe
     drink.update()
-
     return jsonify({
         "success": True,
         "drink": drink.long()
     })
-
 
 
 '''
@@ -193,12 +194,11 @@ def resource_not_found(error):
 
 @app.errorhandler(AuthError)
 def auth_error(error):
-    print("ERROR", type(error))
     return jsonify({
         "success": False,
         "error": error.error,
         "code": error.status_code
-    }), 403
+    }), error.status_code
 
 '''
 @TODO implement error handlers using the @app.errorhandler(error) decorator
