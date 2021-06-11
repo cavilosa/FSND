@@ -53,6 +53,7 @@ def post_drink(payload):
 
     title = body.get("title")
     recipe = body.get("recipe")
+
     if not title or not recipe:
         abort(404)
 
