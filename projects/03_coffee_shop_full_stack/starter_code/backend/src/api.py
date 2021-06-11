@@ -132,15 +132,14 @@ def patch_drink(payload, id):
     recipe = body.get("recipe")
     if recipe is not None:
         # drink.recipe = [json.dumps(recipe)]
-        # recipe=json.dumps([recipe])
-        # drink.recipe = json.dumps([recipe])
-        drink.recipe = [recipe]
+        drink.recipe = recipe
 
     # updating database object with new title or/and recipe
     drink.update()
+
     return jsonify({
         "success": True,
-        "drink": drink.long()
+        "drinks": [drink.long()]
     })
 
 
