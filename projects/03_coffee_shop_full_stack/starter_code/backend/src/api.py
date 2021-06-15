@@ -14,7 +14,9 @@ CORS(app)
 # drops and creates db and a drink object for postman testing
 db_drop_and_create_all()
 
-# this route available for all users, down't require permissionsm shows short drinks information
+
+# this route available for all users, down't require permissionsm shows short
+# drinks information
 @app.route("/drinks")
 def get_drinks():
     drinks_full_list = Drink.query.all()
@@ -26,7 +28,9 @@ def get_drinks():
         "drinks": drinks
     })
 
-# the route shows detailed information about drinks, requires authorization, availabele for barista and manager, not for puclic use
+
+# the route shows detailed information about drinks, requires authorization,
+# availabele for barista and manager, not for puclic use
 @app.route("/drinks-detail")
 @requires_auth("get:drinks-detail")
 def get_drinks_detail(payload):
@@ -35,12 +39,13 @@ def get_drinks_detail(payload):
     drinks = [drink.long() for drink in drinks_full_list]
 
     return jsonify({
-        "success":True,
+        "success": True,
         "drinks": drinks
     })
 
+
 # the route to post a new drink, requires permission, role - manager only
-@app.route("/drinks", methods = ["POST"])
+@app.route("/drinks", methods=["POST"])
 @requires_auth("post:drinks")
 def post_drink(payload):
     body = request.get_json()
@@ -54,8 +59,8 @@ def post_drink(payload):
         abort(404)
 
     drink = Drink(
-        title = title,
-        recipe = json.dumps(recipe)
+        title=title,
+        recipe=json.dumps(recipe)
     )
 
     drink.insert()
@@ -99,6 +104,7 @@ def patch_drink(payload, id):
         "drinks": [drink.long()]
     })
 
+
 # a route to delete a drink for the db by its id, requires manager permission
 @app.route("/drinks/<id>", methods=["DELETE"])
 @requires_auth("delete:drinks")
@@ -125,6 +131,7 @@ def unprocessable(error):
         "message": "unprocessable"
     }), 422
 
+
 @app.errorhandler(404)
 def resource_not_found(error):
     return jsonify({
@@ -132,6 +139,7 @@ def resource_not_found(error):
         "error": 404,
         "message": "resource not found"
     }), 404
+
 
 @app.errorhandler(AuthError)
 def auth_error(error):
