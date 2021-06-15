@@ -9,10 +9,11 @@ import os
 # load_dotenv()
 
 AUTH0_DOMAIN = 'coffee-shop-2021.us.auth0.com'
+ALGORITHMS = ['RS256']
 # ALGORITHMS = os.getenv("ALGORITHMS")
 # API_AUDIENCE = os.getenv("API_AUDIENCE")
 API_AUDIENCE = 'coffee-shop/'
-ALGORITHMS = ['RS256']
+
 
 ## AuthError Exception
 '''
