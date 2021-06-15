@@ -31,7 +31,7 @@ def get_drinks():
 @requires_auth("get:drinks-detail")
 def get_drinks_detail(payload):
     drinks_full_list = Drink.query.all()
-    
+
     if not drinks_full_list:
         flash("There are no drinks to display")
 
@@ -87,13 +87,12 @@ def patch_drink(payload, id):
     # checking for the title from update info
     title = body.get("title")
     if title is not None:
-        drink.title = title
+        drink.title = title if type(title) == str else json.dumps(title)
 
     # checking for the recipe from update info
     recipe = body.get("recipe")
     if recipe is not None:
-        # drink.recipe = [json.dumps(recipe)]
-        drink.recipe = recipe
+        drink.recipe = recipe if type(recipe) == str else json.dumps(recipe)
 
     # updating database object with new title or/and recipe
     drink.update()
