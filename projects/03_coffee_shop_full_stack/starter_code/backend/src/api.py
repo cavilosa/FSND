@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, jsonify, abort
+from flask import Flask, request, jsonify, abort, flash
 from sqlalchemy import exc
 import json
 from flask_cors import CORS
@@ -19,9 +19,6 @@ db_drop_and_create_all()
 def get_drinks():
     drinks_full_list = Drink.query.all()
 
-    if not drinks_full_list:
-        abort(404)
-
     drinks = [drink.short() for drink in drinks_full_list]
 
     return jsonify({
@@ -34,8 +31,10 @@ def get_drinks():
 @requires_auth("get:drinks-detail")
 def get_drinks_detail(payload):
     drinks_full_list = Drink.query.all()
+    
     if not drinks_full_list:
-        abort(404)
+        flash("There are no drinks to display")
+
     drinks = [drink.long() for drink in drinks_full_list]
 
     return jsonify({
@@ -110,7 +109,8 @@ def patch_drink(payload, id):
 def delete_drink(payliad, id):
     drink = Drink.query.get(id)
     if not drink:
-        abort(404)
+        # abort(404)
+        flash(f"There is no drink with {id} id.")
 
     drink.delete()
 
