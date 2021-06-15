@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, jsonify, abort
+from flask import Flask, request, jsonify, abort, flash
 from sqlalchemy import exc
 import json
 from flask_cors import CORS
@@ -31,9 +31,6 @@ def get_drinks():
 @requires_auth("get:drinks-detail")
 def get_drinks_detail(payload):
     drinks_full_list = Drink.query.all()
-
-    if not drinks_full_list:
-        abort (404)
 
     drinks = [drink.long() for drink in drinks_full_list]
 
@@ -77,7 +74,7 @@ def patch_drink(payload, id):
     drink = Drink.query.get(id)
     # check if the drink with the id exists
     if not drink:
-        abort(404)
+        flash(f"The drink with id {id} doesn't exist")
 
     # getting json information about what to uodate
     body = request.get_json()
