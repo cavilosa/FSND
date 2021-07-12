@@ -11,7 +11,9 @@ def create_app(test_config=None):
   @app.route("/")
   def get_greeting():
       excited = "Maryna"
-      greeting = f"Hello, {excited}" 
+      test = os.environ["SECRET"]
+      greeting = f"Hello, {test}" 
+     
       if excited == 'true': greeting = greeting + "!!!!!"
       return greeting
 

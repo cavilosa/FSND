@@ -1,3 +1,7 @@
-export AUTH0_DOMAIN_NAME="korzhyk-app.us.auth0.com"
+export AUTH0_DOMAIN="korzhyk-app.us.auth0.com"
 export JWT_CODE_SIGNING_SECRET="UwbJRQgpYJI9Sq_6i2GjuR10a8cSG9luenl6geSoOGgFXho7PjvRw5A39OC6e56q"
 export AUTH0_CLIEND_ID="a0mzLPX0PZ6KPWVGo058FFCUUNwShqIN"
+export ALGORITHMS=["RS256"]
+export API_AUDIENCE=""
+export DATABASE_URL=""
+export SECRET="SECRET"
