@@ -8,6 +8,13 @@ def create_app(test_config=None):
   app = Flask(__name__)
   CORS(app)
 
+  @app.route("/")
+  def get_greeting():
+      excited = "Maryna"
+      greeting = f"Hello, {excited}" 
+      if excited == 'true': greeting = greeting + "!!!!!"
+      return greeting
+
   return app
 
 APP = create_app()
