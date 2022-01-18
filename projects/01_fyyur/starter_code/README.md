@@ -8,7 +8,7 @@ Fyyur
   * added recentle adde artists and venues to the main page,
   * added button find a show to the main page,
   * implemented search shows by artist id an venue id on the shows page
-  * added lacking HYML and CSS
+  * added lacking HTML and CSS
 
 
 
