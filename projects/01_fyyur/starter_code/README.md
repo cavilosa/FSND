@@ -161,7 +161,7 @@ git branch -M master
 ```
 Once you have finished editing your code, you can push the local repository to your Github account using the following commands.
 ```
-git add . --all   
+git add . --all
 git commit -m "your comment"
 git push -u origin master
 ```
@@ -176,12 +176,32 @@ source env/bin/activate
 source env/Scripts/activate
 ```
 
+Create .env file with these variables for the postgres database access:
+```
+password="YOUR PASSWORD"
+username="YOUR USERNAME"
+```
+
 4. **Install the dependencies:**
 ```
 pip install -r requirements.txt
 ```
 
-5. **Run the development server:**
+5. **Create DataBase**
+Create database locally with postgres for ubuntu:
+
+```
+sudo -u postgres createdb fyyur
+```
+
+Now we let's run the migrations to fill in the database:
+
+```
+flask db migrate
+flask db upgrade
+```
+
+6. **Run the development server:**
 ```
 export FLASK_APP=myapp
 export FLASK_ENV=development # enables debug mode

@@ -12,5 +12,7 @@ DEBUG = True
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # TODO IMPLEMENT DATABASE URL
+username = os.environ.get("username")
+password = os.environ.get("password")
 
-SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:cavilosa1@localhost:5432/fyyur'
+SQLALCHEMY_DATABASE_URI = "postgresql://{}:{}@{}/{}".format(username, password, 'localhost:5432', 'fyyur')

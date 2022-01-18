@@ -94,7 +94,7 @@ def venues():
     venues = Venue.query.all()
 
     for unique_place in unique_places:
-        # populating each enuque place with its only shows
+        # populating each unique place with its only shows
         venues = db.session.query(Venue.id, Venue.name).order_by(Venue.id).filter(Venue.city == unique_place.city).filter(Venue.state == unique_place.state)
         areas.append({
             "city": unique_place.city,
